@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* Backgrounds – OLED-friendly deep dark */
+  --bg-base:     #09090f;
+  --bg-surface:  #0f0f18;
+  --bg-elevated: #17172a;
+  --bg-hover:    #1e1e32;
+  --bg-glass:    rgba(255, 255, 255, 0.03);
+
+  /* Borders */
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-muted: rgba(255, 255, 255, 0.04);
+  --border-focus: #6366f1;
+
+  /* Text */
+  --text-primary:   #f1f0ff;
+  --text-secondary: #9b99b8;
+  --text-muted:     #5c5a7a;
+
+  /* Accent – indigo/violet */
+  --accent:              #6366f1;
+  --accent-hover:        #818cf8;
+  --accent-glow:         rgba(99, 102, 241, 0.35);
+  --accent-subtle-bg:    rgba(99, 102, 241, 0.12);
+  --accent-subtle-border:rgba(99, 102, 241, 0.25);
+
+  /* Semantic */
+  --success: #10b981;
+  --error:   #ef4444;
+  --warning: #f59e0b;
+
+  /* Tool accent colors */
+  --json-accent:  #10b981;
+  --diff-accent:  #6366f1;
+  --text-accent:  #f59e0b;
+}
+
+/* ── Reset & base ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbars ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+
+/* ── Heading font ───────────────────────────────────────────────────────────── */
+h1, h2, h3, .font-heading { font-family: 'Poppins', sans-serif; }
+
+/* ── Focus ring ─────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Home page entrance animation ──────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+
+/* ── Card hover glow ────────────────────────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
