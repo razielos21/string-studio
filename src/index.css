@@ -55,10 +55,13 @@ html, body, #root {
 }
 
 /* ── Scrollbars ─────────────────────────────────────────────────────────────── */
+/* WebKit */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
 
 /* ── Heading font ───────────────────────────────────────────────────────────── */
 h1, h2, h3, .font-heading { font-family: 'Poppins', sans-serif; }
@@ -87,4 +90,16 @@ h1, h2, h3, .font-heading { font-family: 'Poppins', sans-serif; }
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.5; }
   50%       { opacity: 1; }
+}
+
+/* ── Tool card — CSS-variable-driven hover ──────────────────────────────────── */
+.tool-card {
+  border-color: var(--card-border);
+}
+.tool-card:hover,
+.tool-card:focus-visible {
+  border-color: var(--card-border-hover) !important;
+  background: rgba(255,255,255,0.045) !important;
+  box-shadow: 0 0 40px var(--card-glow) !important;
+  transform: translateY(-2px);
 }

@@ -44,9 +44,9 @@ const tools = [
 ]
 
 const perks = [
-  { Icon: Zap,       label: 'Instant',    desc: 'Runs entirely in your browser.' },
-  { Icon: Lock,      label: 'Private',    desc: 'Data never leaves your machine.' },
-  { Icon: HardDrive, label: 'Persistent', desc: 'Survives refresh via localStorage.' },
+  { Icon: Zap,       label: 'Instant',    desc: 'Runs entirely in your browser' },
+  { Icon: Lock,      label: 'Private',    desc: 'Data never leaves your machine' },
+  { Icon: HardDrive, label: 'Persistent', desc: 'Survives refresh via localStorage' },
 ]
 
 export function Home() {
@@ -54,7 +54,7 @@ export function Home() {
 
   return (
     <div
-      className="h-full flex flex-col overflow-y-auto overflow-x-hidden"
+      className="flex flex-col overflow-y-auto overflow-x-hidden min-h-full"
       style={{ background: 'var(--bg-base)', position: 'relative' }}
     >
       {/* Radial glow */}
@@ -69,7 +69,7 @@ export function Home() {
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
         className="relative z-10 flex flex-col items-center justify-center text-center px-8 animate-fade-up"
-        style={{ flex: '0 0 auto', paddingTop: '8vh', paddingBottom: '5vh' }}
+        style={{ flex: '0 0 auto', paddingTop: '5vh', paddingBottom: '3vh' }}
       >
         {/* Badge */}
         <div
@@ -84,7 +84,7 @@ export function Home() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: '#6366f1' }} />
             <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: '#6366f1' }} />
           </span>
-          Developer text tools - all in one place
+          Developer text tools — all in one place
         </div>
 
         {/* Headline */}
@@ -109,24 +109,48 @@ export function Home() {
           Format, diff, and transform text without leaving your flow.
         </p>
 
-        {/* Perks */}
-        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 animate-fade-up delay-200">
+        {/* Perks — mini cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-md w-full animate-fade-up delay-200">
           {perks.map(({ Icon, label, desc }) => (
-            <div key={label} className="flex items-center gap-2">
-              <Icon size={14} style={{ color: 'var(--accent)' }} aria-hidden />
-              <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{label}</span>
-              <span className="text-sm" style={{ color: 'var(--text-muted)' }}>{desc}</span>
+            <div
+              key={label}
+              className="flex flex-col items-center text-center gap-2.5 rounded-xl p-4"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid var(--border)',
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: 'var(--accent-subtle-bg)', border: '1px solid var(--accent-subtle-border)' }}
+              >
+                <Icon size={14} style={{ color: 'var(--accent)' }} aria-hidden />
+              </div>
+              <div>
+                <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>{label}</p>
+                <p className="text-[11px] mt-0.5 leading-snug" style={{ color: 'var(--text-muted)' }}>{desc}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
+      {/* ── Section divider ───────────────────────────────── */}
+      <div
+        className="relative z-10 flex items-center gap-4 animate-fade-up delay-300"
+        style={{ padding: '0 clamp(1.5rem, 4vw, 4rem)', maxWidth: '1100px', alignSelf: 'center', width: '100%', marginBottom: '1.25rem' }}
+      >
+        <div className="flex-1 h-px" style={{ background: 'var(--border-muted)' }} />
+        <span className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>Tools</span>
+        <div className="flex-1 h-px" style={{ background: 'var(--border-muted)' }} />
+      </div>
+
       {/* ── Cards ────────────────────────────────────────── */}
       <section
         className="relative z-10 w-full mx-auto animate-fade-up delay-300"
-        style={{ flex: '1 1 auto', padding: '0 clamp(1.5rem, 4vw, 4rem) clamp(2rem, 6vh, 5rem)', maxWidth: '1100px', alignSelf: 'center' }}
+        style={{ flex: '0 0 auto', padding: '0 clamp(1.5rem, 4vw, 4rem) clamp(1.25rem, 3vh, 2.5rem)', maxWidth: '1100px', alignSelf: 'center' }}
       >
-        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {tools.map(({ id, path, Icon, name, tagline, description, accent, glow, border, borderHover, tags }) => (
             <ToolCard
               key={id}
@@ -145,6 +169,31 @@ export function Home() {
           ))}
         </div>
       </section>
+
+      {/* ── Footer ───────────────────────────────────────── */}
+      <footer
+        className="relative z-10 mt-auto animate-fade-up delay-400"
+        style={{ borderTop: '1px solid var(--border-muted)', flex: '0 0 auto' }}
+      >
+        <div
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 mx-auto w-full"
+          style={{ padding: 'clamp(0.75rem, 2vh, 1.25rem) clamp(1.5rem, 4vw, 4rem)', maxWidth: '1100px' }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-semibold font-heading" style={{ color: 'var(--text-secondary)' }}>
+              String Studio
+            </span>
+            <span style={{ color: 'var(--border)' }}>·</span>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>v1.0</span>
+            <span style={{ color: 'var(--border)' }}>·</span>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Three tools. One tab. Zero backend.</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+            <Lock size={11} aria-hidden />
+            No data leaves your browser. Ever.
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
@@ -165,34 +214,21 @@ interface ToolCardProps {
 }
 
 function ToolCard({ path, Icon, name, tagline, description, accent, glow, border, borderHover, tags, onNavigate }: ToolCardProps) {
-  const applyActive = (el: HTMLButtonElement) => {
-    el.style.borderColor = borderHover
-    el.style.background = 'rgba(255,255,255,0.045)'
-    el.style.boxShadow = `0 0 40px ${glow}`
-    el.style.transform = 'translateY(-2px)'
-  }
-  const applyBase = (el: HTMLButtonElement) => {
-    el.style.borderColor = border
-    el.style.background = 'rgba(255,255,255,0.025)'
-    el.style.boxShadow = 'none'
-    el.style.transform = 'translateY(0)'
-  }
-
   return (
     <button
       onClick={() => onNavigate(path)}
-      className="group relative flex flex-col gap-5 rounded-2xl text-left cursor-pointer transition-all duration-200 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="tool-card group relative flex flex-col gap-5 rounded-2xl text-left cursor-pointer transition-all duration-200 overflow-hidden"
       style={{
         padding: 'clamp(1.25rem, 2.5vw, 1.75rem)',
         background: 'rgba(255,255,255,0.025)',
-        border: `1px solid ${border}`,
+        borderWidth: '1px',
+        borderStyle: 'solid',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-      }}
-      onMouseEnter={(e) => applyActive(e.currentTarget)}
-      onMouseLeave={(e) => applyBase(e.currentTarget)}
-      onFocus={(e) => applyActive(e.currentTarget)}
-      onBlur={(e) => applyBase(e.currentTarget)}
+        '--card-border': border,
+        '--card-border-hover': borderHover,
+        '--card-glow': glow,
+      } as React.CSSProperties}
       aria-label={`Open ${name}`}
     >
       {/* Corner glow */}

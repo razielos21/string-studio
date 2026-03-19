@@ -17,7 +17,7 @@ export function InputPanel({ label, value, onChange, language }: InputPanelProps
     <div className="flex flex-col flex-1 min-h-0 min-w-0">
       <div
         className="px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase shrink-0"
-        style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)' }}
+        style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(99,102,241,0.35)' }}
       >
         {label}
       </div>

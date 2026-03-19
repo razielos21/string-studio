@@ -13,7 +13,7 @@ export function TextInput({ value, onChange }: TextInputProps) {
     <div className="flex flex-col h-full min-h-0">
       <div
         className="px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase shrink-0"
-        style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)' }}
+        style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(245,158,11,0.35)' }}
       >
         Input
       </div>

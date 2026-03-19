@@ -35,10 +35,8 @@ function SectionToggle({
       <button
         onClick={onToggle}
         aria-expanded={open}
-        className="flex items-center gap-2 w-full px-3 py-2 text-xs font-medium cursor-pointer text-left transition-colors"
+        className="flex items-center gap-2 w-full px-3 py-2 text-xs font-medium cursor-pointer text-left transition-colors hover:bg-white/[0.04]"
         style={{ color: open ? 'var(--text-primary)' : 'var(--text-muted)' }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)' }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
       >
         {open
           ? <ChevronDown size={11} style={{ color: 'var(--accent)' }} />

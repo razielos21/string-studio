@@ -31,7 +31,7 @@ export function Comparator() {
   }, [])
 
   return (
-    <div className="flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-base)' }}>
+    <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
       {/* Toolbar */}
       <div
         className="flex items-center gap-2.5 px-4 py-3 flex-wrap shrink-0"

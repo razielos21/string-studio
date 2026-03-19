@@ -22,7 +22,7 @@ export function TextPlayground() {
   const handleClear = useCallback(() => { setInput(''); setOutput(null) }, [setInput])
 
   return (
-    <div className="flex h-full overflow-hidden" style={{ background: 'var(--bg-base)' }}>
+    <div className="flex h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
       {/* Main area */}
       <div className="flex flex-col flex-1 min-h-0 min-w-0">
         {/* Info bar */}

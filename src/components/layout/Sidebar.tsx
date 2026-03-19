@@ -71,10 +71,10 @@ export function Sidebar() {
         className="flex items-center justify-center h-14 border-b border-[var(--border)] cursor-pointer hover:bg-white/5 transition-colors shrink-0"
       >
         <span
-          className="text-sm font-bold tracking-tight font-heading"
+          className="font-heading font-bold text-sm tracking-tight"
           style={{ color: 'var(--accent)' }}
         >
-          SS
+          {'{ S }'}
         </span>
       </button>
 
