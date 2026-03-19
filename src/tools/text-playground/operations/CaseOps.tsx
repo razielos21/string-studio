@@ -1,4 +1,4 @@
-import { Button } from '../../../components/ui/Button'
+import { OpButton } from './OpButton'
 import {
   toUpperCase,
   toLowerCase,
@@ -11,18 +11,25 @@ import {
 
 interface CaseOpsProps {
   onApply: (transform: (s: string) => string) => void
+  filter: string
 }
 
-export function CaseOps({ onApply }: CaseOpsProps) {
+const OPS = [
+  { label: 'UPPER',      transform: toUpperCase },
+  { label: 'lower',      transform: toLowerCase },
+  { label: 'Title',      transform: toTitleCase },
+  { label: 'Sentence',   transform: toSentenceCase },
+  { label: 'camelCase',  transform: toCamelCase },
+  { label: 'snake_case', transform: toSnakeCase },
+  { label: 'kebab-case', transform: toKebabCase },
+]
+
+export function CaseOps({ onApply, filter }: CaseOpsProps) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      <Button size="sm" onClick={() => onApply(toUpperCase)}>UPPER</Button>
-      <Button size="sm" onClick={() => onApply(toLowerCase)}>lower</Button>
-      <Button size="sm" onClick={() => onApply(toTitleCase)}>Title</Button>
-      <Button size="sm" onClick={() => onApply(toSentenceCase)}>Sentence</Button>
-      <Button size="sm" onClick={() => onApply(toCamelCase)}>camelCase</Button>
-      <Button size="sm" onClick={() => onApply(toSnakeCase)}>snake_case</Button>
-      <Button size="sm" onClick={() => onApply(toKebabCase)}>kebab-case</Button>
+      {OPS.map(({ label, transform }) => (
+        <OpButton key={label} label={label} transform={transform} onApply={onApply} filter={filter} />
+      ))}
     </div>
   )
 }

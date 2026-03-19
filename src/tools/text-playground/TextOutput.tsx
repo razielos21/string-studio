@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Type } from 'lucide-react'
+import Editor from '@monaco-editor/react'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { getStats } from './text-playground.utils'
 
@@ -26,17 +27,33 @@ export function TextOutput({ value }: TextOutputProps) {
       </div>
 
       {value !== null ? (
-        <pre
-          className="flex-1 w-full overflow-auto font-mono p-4 m-0 whitespace-pre-wrap break-words"
-          style={{
-            background: 'var(--bg-base)',
-            color: 'var(--text-primary)',
-            fontSize: '14px',
-            lineHeight: '1.65',
-          }}
-        >
-          {value}
-        </pre>
+        <div className="flex-1 min-h-0">
+          <Editor
+            height="100%"
+            language="plaintext"
+            theme="vs-dark"
+            value={value}
+            options={{
+              readOnly: true,
+              domReadOnly: true,
+              minimap: { enabled: false },
+              fontSize: 14,
+              lineHeight: 1.65,
+              lineNumbers: 'off',
+              wordWrap: 'on',
+              scrollBeyondLastLine: false,
+              renderLineHighlight: 'none',
+              overviewRulerBorder: false,
+              overviewRulerLanes: 0,
+              hideCursorInOverviewRuler: true,
+              scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+              fixedOverflowWidgets: true,
+              find: { addExtraSpaceOnTop: false },
+              padding: { top: 16, bottom: 16 },
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+            }}
+          />
+        </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3">
           <div

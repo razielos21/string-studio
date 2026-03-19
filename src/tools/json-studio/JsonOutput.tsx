@@ -23,6 +23,8 @@ export function JsonOutput({ value }: JsonOutputProps) {
           renderLineHighlight: 'none',
           scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
           domReadOnly: true,
+          fixedOverflowWidgets: true,
+          find: { addExtraSpaceOnTop: false },
         }}
       />
     </div>

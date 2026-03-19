@@ -28,6 +28,8 @@ export function DiffView({ original, modified, language, inline, ignoreWhitespac
           wordWrap: 'off',
           ignoreTrimWhitespace: ignoreWhitespace,
           scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
+          fixedOverflowWidgets: true,
+          find: { addExtraSpaceOnTop: false },
           originalEditable: false,
           readOnly: true,
         }}

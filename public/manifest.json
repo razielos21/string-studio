@@ -1,0 +1,19 @@
+{
+  "name": "String Studio",
+  "short_name": "String Studio",
+  "description": "Format, diff, and transform text. JSON Studio, Comparator, and Text Playground — all client-side.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090f",
+  "theme_color": "#09090f",
+  "icons": [
+    {
+      "src": "/stringstudiomain.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer", "productivity", "utilities"],
+  "screenshots": []
+}

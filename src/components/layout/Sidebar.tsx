@@ -2,6 +2,8 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { GitCompare, Braces, Type, Home } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
+declare const __APP_VERSION__: string
+
 const tools = [
   { path: '/json',       label: 'JSON Studio',      shortLabel: 'JSON',  Icon: Braces,     color: 'var(--json-accent)' },
   { path: '/comparator', label: 'Comparator',        shortLabel: 'Diff',  Icon: GitCompare, color: 'var(--diff-accent)' },
@@ -91,7 +93,7 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="px-1 py-2 border-t border-[var(--border)] shrink-0">
-        <p className="text-[9px] text-[var(--text-muted)] text-center tracking-wider">v1.0</p>
+        <p className="text-[9px] text-[var(--text-muted)] text-center tracking-wider">v{__APP_VERSION__}</p>
       </div>
     </aside>
   )

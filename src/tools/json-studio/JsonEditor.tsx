@@ -24,6 +24,8 @@ export function JsonEditor({ value, onChange }: JsonEditorProps) {
           formatOnPaste: false,
           renderLineHighlight: 'line',
           scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
+          fixedOverflowWidgets: true,
+          find: { addExtraSpaceOnTop: false },
         }}
       />
     </div>

@@ -15,10 +15,15 @@ export function Tooltip({ content, children, className }: TooltipProps) {
       className={cn('relative inline-flex', className)}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
+      onFocus={() => setVisible(true)}
+      onBlur={() => setVisible(false)}
     >
       {children}
       {visible && (
-        <div role="tooltip" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 text-xs bg-[var(--bg-hover)] text-[var(--text-primary)] rounded border border-[var(--border)] whitespace-nowrap pointer-events-none z-50">
+        <div
+          role="tooltip"
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 text-xs bg-[var(--bg-hover)] text-[var(--text-primary)] rounded border border-[var(--border)] whitespace-nowrap pointer-events-none z-50"
+        >
           {content}
         </div>
       )}

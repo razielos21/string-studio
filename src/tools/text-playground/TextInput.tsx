@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import Editor from '@monaco-editor/react'
 import { getStats } from './text-playground.utils'
 
 interface TextInputProps {
@@ -17,19 +18,43 @@ export function TextInput({ value, onChange }: TextInputProps) {
       >
         Input
       </div>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Paste or type text here…"
-        spellCheck={false}
-        className="flex-1 w-full resize-none font-mono p-4 focus:outline-none"
-        style={{
-          background: 'var(--bg-base)',
-          color: 'var(--text-primary)',
-          fontSize: '14px',
-          lineHeight: '1.65',
-        }}
-      />
+
+      <div className="relative flex-1 min-h-0">
+        <Editor
+          height="100%"
+          language="plaintext"
+          theme="vs-dark"
+          value={value}
+          onChange={(v) => onChange(v ?? '')}
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineHeight: 1.65,
+            lineNumbers: 'off',
+            wordWrap: 'on',
+            scrollBeyondLastLine: false,
+            renderLineHighlight: 'none',
+            overviewRulerBorder: false,
+            overviewRulerLanes: 0,
+            hideCursorInOverviewRuler: true,
+            scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+            fixedOverflowWidgets: true,
+            find: { addExtraSpaceOnTop: false },
+            padding: { top: 16, bottom: 16 },
+            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          }}
+        />
+        {/* Placeholder shown when editor is empty */}
+        {!value && (
+          <div
+            className="absolute top-0 left-0 px-[62px] py-4 pointer-events-none font-mono text-sm select-none"
+            style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.65' }}
+          >
+            Paste or type text here…
+          </div>
+        )}
+      </div>
+
       <div
         className="flex items-center gap-4 px-3 py-1.5 text-xs shrink-0"
         style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-surface)', color: 'var(--text-muted)' }}

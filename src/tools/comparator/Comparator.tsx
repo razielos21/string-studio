@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut'
 import { InputPanel } from './InputPanel'
 import { DiffView } from './DiffView'
 import { DiffStats } from './DiffStats'
@@ -15,20 +16,29 @@ export function Comparator() {
   const [autoDetect, setAutoDetect] = useState(true)
   const [inline, setInline] = useState(false)
   const [ignoreWhitespace, setIgnoreWhitespace] = useState(false)
+  const [ignoreCase, setIgnoreCase] = useState(false)
   const [mode, setMode] = useState<'input' | 'diff'>('input')
 
   useEffect(() => {
     if (autoDetect) setLanguage(detectLanguage(left || right))
   }, [left, right, autoDetect])
 
-  const handleCompare = useCallback(() => setMode('diff'), [])
-  const handleEdit = useCallback(() => setMode('input'), [])
+  const handleToggleMode = useCallback(() => setMode((m) => m === 'input' ? 'diff' : 'input'), [])
   const handleClear = useCallback(() => { setLeft(''); setRight(''); setMode('input') }, [setLeft, setRight])
 
   const handleLanguageChange = useCallback((lang: Language) => {
     setLanguage(lang)
     setAutoDetect(false)
   }, [])
+
+  useKeyboardShortcut('Enter', handleToggleMode, { alt: true })
+  useKeyboardShortcut('i', () => setInline((v) => !v), { alt: true })
+
+  // Normalize once for ignoreCase so DiffStats and DiffView share the same values
+  const [diffLeft, diffRight] = useMemo(
+    () => ignoreCase ? [left.toLowerCase(), right.toLowerCase()] : [left, right],
+    [left, right, ignoreCase],
+  )
 
   return (
     <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
@@ -67,7 +77,7 @@ export function Comparator() {
           size="md"
           variant={inline ? 'accent' : 'default'}
           onClick={() => setInline(!inline)}
-          title={inline ? 'Switch to side-by-side' : 'Switch to inline diff'}
+          title={inline ? 'Switch to side-by-side (Alt+I)' : 'Switch to inline diff (Alt+I)'}
         >
           {inline ? <AlignLeft size={12} /> : <Columns2 size={12} />}
           {inline ? 'Inline' : 'Side-by-side'}
@@ -79,8 +89,20 @@ export function Comparator() {
             checked={ignoreWhitespace}
             onChange={(e) => setIgnoreWhitespace(e.target.checked)}
             className="accent-[var(--accent)] rounded"
+            aria-label="Ignore whitespace differences"
           />
           <span className="text-xs">Ignore whitespace</span>
+        </label>
+
+        <label className="flex items-center gap-1.5 cursor-pointer select-none" style={{ color: 'var(--text-secondary)' }}>
+          <input
+            type="checkbox"
+            checked={ignoreCase}
+            onChange={(e) => setIgnoreCase(e.target.checked)}
+            className="accent-[var(--accent)] rounded"
+            aria-label="Ignore case differences"
+          />
+          <span className="text-xs">Ignore case</span>
         </label>
 
         <div className="flex-1" />
@@ -91,17 +113,17 @@ export function Comparator() {
         </Button>
 
         {mode === 'input' ? (
-          <Button variant="accent" size="md" onClick={handleCompare}>
+          <Button variant="accent" size="md" onClick={handleToggleMode} title="Compare (Alt+Enter)">
             Compare
           </Button>
         ) : (
-          <Button variant="default" size="md" onClick={handleEdit}>
+          <Button variant="default" size="md" onClick={handleToggleMode} title="Edit inputs (Alt+Enter)">
             Edit inputs
           </Button>
         )}
       </div>
 
-      {mode === 'diff' && <DiffStats original={left} modified={right} />}
+      {mode === 'diff' && <DiffStats original={diffLeft} modified={diffRight} ignoreCase={ignoreCase} />}
 
       {mode === 'input' ? (
         <div className="flex flex-1 min-h-0">
@@ -110,7 +132,13 @@ export function Comparator() {
           <InputPanel label="Text B — Modified" value={right} onChange={setRight} language={language} />
         </div>
       ) : (
-        <DiffView original={left} modified={right} language={language} inline={inline} ignoreWhitespace={ignoreWhitespace} />
+        <DiffView
+          original={diffLeft}
+          modified={diffRight}
+          language={language}
+          inline={inline}
+          ignoreWhitespace={ignoreWhitespace}
+        />
       )}
     </div>
   )

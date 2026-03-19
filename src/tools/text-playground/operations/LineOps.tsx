@@ -1,4 +1,4 @@
-import { Button } from '../../../components/ui/Button'
+import { OpButton } from './OpButton'
 import {
   sortLinesAZ,
   sortLinesZA,
@@ -9,16 +9,23 @@ import {
 
 interface LineOpsProps {
   onApply: (transform: (s: string) => string) => void
+  filter: string
 }
 
-export function LineOps({ onApply }: LineOpsProps) {
+const OPS = [
+  { label: 'Sort A→Z',      transform: sortLinesAZ },
+  { label: 'Sort Z→A',      transform: sortLinesZA },
+  { label: 'Remove dupes',  transform: removeDuplicateLines },
+  { label: 'Reverse',       transform: reverseLines },
+  { label: 'Add line #s',   transform: addLineNumbers },
+]
+
+export function LineOps({ onApply, filter }: LineOpsProps) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      <Button size="sm" onClick={() => onApply(sortLinesAZ)}>Sort A→Z</Button>
-      <Button size="sm" onClick={() => onApply(sortLinesZA)}>Sort Z→A</Button>
-      <Button size="sm" onClick={() => onApply(removeDuplicateLines)}>Remove dupes</Button>
-      <Button size="sm" onClick={() => onApply(reverseLines)}>Reverse</Button>
-      <Button size="sm" onClick={() => onApply(addLineNumbers)}>Add line #s</Button>
+      {OPS.map(({ label, transform }) => (
+        <OpButton key={label} label={label} transform={transform} onApply={onApply} filter={filter} />
+      ))}
     </div>
   )
 }

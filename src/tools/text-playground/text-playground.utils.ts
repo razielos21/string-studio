@@ -46,7 +46,8 @@ export function trimEnds(s: string) {
 }
 
 export function collapseSpaces(s: string) {
-  return s.replace(/[ \t]+/g, ' ').replace(/^ /gm, '').replace(/ $/gm, '')
+  // Only collapse runs of spaces/tabs into a single space — preserve leading/trailing
+  return s.replace(/[ \t]+/g, ' ')
 }
 
 export function removeBlankLines(s: string) {
@@ -65,12 +66,8 @@ export function escapeRegex(s: string) {
 
 export function findReplace(s: string, find: string, replace: string, useRegex: boolean): string {
   if (!find) return s
-  try {
-    const pattern = useRegex ? find : escapeRegex(find)
-    return s.replace(new RegExp(pattern, 'g'), replace)
-  } catch {
-    return s
-  }
+  const pattern = useRegex ? find : escapeRegex(find)
+  return s.replace(new RegExp(pattern, 'g'), replace)
 }
 
 // ─── Line transforms ──────────────────────────────────────────────────────────
@@ -114,10 +111,16 @@ export function base64Encode(s: string) {
 }
 
 export function base64Decode(s: string) {
+  const trimmed = s.trim()
+  if (!trimmed) return ''
+  // Validate base64 characters
+  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(trimmed)) {
+    throw new Error('Invalid Base64 — contains characters outside the Base64 alphabet')
+  }
   try {
-    return decodeURIComponent(escape(atob(s.trim())))
+    return decodeURIComponent(escape(atob(trimmed)))
   } catch {
-    return atob(s.trim())
+    throw new Error('Failed to decode Base64 — input may be malformed')
   }
 }
 
@@ -129,7 +132,7 @@ export function urlDecode(s: string) {
   try {
     return decodeURIComponent(s)
   } catch {
-    return s
+    throw new Error('Failed to URL-decode — input contains malformed percent-encoded sequences')
   }
 }
 
@@ -149,6 +152,21 @@ export function htmlUnescape(s: string) {
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+export function matchesFilter(label: string, filter: string): boolean {
+  return !filter.trim() || label.toLowerCase().includes(filter.toLowerCase())
+}
+
+export function isValidRegex(pattern: string): boolean {
+  try {
+    new RegExp(pattern)
+    return true
+  } catch {
+    return false
+  }
 }
 
 // ─── Stats ───────────────────────────────────────────────────────────────────
