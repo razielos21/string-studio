@@ -1,6 +1,7 @@
-import { Wand2, Minimize2, Trash2, Zap } from 'lucide-react'
+import { Wand2, Minimize2, Trash2, Zap, List, Code2 } from 'lucide-react'
 import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
+import { ShareButton } from '../../components/ui/ShareButton'
 import { Select } from '../../components/ui/Select'
 
 interface JsonToolbarProps {
@@ -11,6 +12,9 @@ interface JsonToolbarProps {
   output: string
   indent: 2 | 4
   onIndentChange: (v: 2 | 4) => void
+  outputView: 'raw' | 'tree'
+  onOutputViewChange: (v: 'raw' | 'tree') => void
+  getShareData: () => unknown
 }
 
 const indentOptions = [
@@ -26,6 +30,9 @@ export function JsonToolbar({
   output,
   indent,
   onIndentChange,
+  outputView,
+  onOutputViewChange,
+  getShareData,
 }: JsonToolbarProps) {
   return (
     <div className="flex items-center gap-2.5 px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-surface)] flex-wrap">
@@ -53,7 +60,19 @@ export function JsonToolbar({
 
       <div className="flex-1" />
 
+      {output && (
+        <Button
+          variant={outputView === 'tree' ? 'accent' : 'default'}
+          size="md"
+          onClick={() => onOutputViewChange(outputView === 'tree' ? 'raw' : 'tree')}
+          title={outputView === 'tree' ? 'Switch to raw editor' : 'Switch to tree view'}
+        >
+          {outputView === 'tree' ? <Code2 size={14} /> : <List size={14} />}
+          {outputView === 'tree' ? 'Raw' : 'Tree'}
+        </Button>
+      )}
       {output && <CopyButton text={output} size="md" />}
+      <ShareButton getData={getShareData} size="md" />
       <Button variant="ghost" size="md" onClick={onClear} title="Clear">
         <Trash2 size={14} />
         Clear

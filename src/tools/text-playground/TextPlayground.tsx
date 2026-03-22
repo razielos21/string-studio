@@ -5,7 +5,9 @@ import { TextInput } from './TextInput'
 import { TextOutput } from './TextOutput'
 import { OperationsPanel } from './OperationsPanel'
 import { Button } from '../../components/ui/Button'
+import { ShareButton } from '../../components/ui/ShareButton'
 import { RotateCcw, Trash2, Undo2 } from 'lucide-react'
+import { useHashState } from '../../hooks/useHashState'
 
 const MAX_HISTORY = 50
 
@@ -45,6 +47,10 @@ export function TextPlayground() {
     setHistory([])
     setOutput(null)
   }, [setInput])
+
+  useHashState<{ i: string }>((state) => { if (state.i !== undefined) setInput(state.i) })
+
+  const getShareData = useCallback(() => ({ i: input }), [input])
 
   useKeyboardShortcut('z', handleUndo, { alt: true })
   useKeyboardShortcut('r', handleReset, { alt: true })
@@ -91,6 +97,7 @@ export function TextPlayground() {
             <Trash2 size={11} />
             Clear
           </Button>
+          <ShareButton getData={getShareData} size="sm" />
         </div>
 
         {/* Editors */}

@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { GitCompare, Braces, Type, Home } from 'lucide-react'
+import { GitCompare, Braces, Type, Home, Monitor } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
 declare const __APP_VERSION__: string
@@ -8,6 +8,7 @@ const tools = [
   { path: '/json',       label: 'JSON Studio',      shortLabel: 'JSON',  Icon: Braces,     color: 'var(--json-accent)' },
   { path: '/comparator', label: 'Comparator',        shortLabel: 'Diff',  Icon: GitCompare, color: 'var(--diff-accent)' },
   { path: '/text',       label: 'Text Playground',   shortLabel: 'Text',  Icon: Type,       color: 'var(--text-accent)' },
+  { path: '/html',       label: 'HTML Simulator',    shortLabel: 'HTML',  Icon: Monitor,    color: 'var(--html-accent)' },
 ]
 
 function NavItem({

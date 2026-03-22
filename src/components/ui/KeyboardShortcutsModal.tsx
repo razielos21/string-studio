@@ -20,6 +20,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { keys: ['Alt', '1'], description: 'Go to JSON Studio' },
       { keys: ['Alt', '2'], description: 'Go to Comparator' },
       { keys: ['Alt', '3'], description: 'Go to Text Playground' },
+      { keys: ['Alt', '4'], description: 'Go to HTML Simulator' },
     ],
   },
   {

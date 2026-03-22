@@ -3,11 +3,14 @@ import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut'
 import { InputPanel } from './InputPanel'
 import { DiffView } from './DiffView'
+import { CharDiffView } from './CharDiffView'
 import { DiffStats } from './DiffStats'
 import { Select } from '../../components/ui/Select'
 import { Button } from '../../components/ui/Button'
+import { ShareButton } from '../../components/ui/ShareButton'
 import { detectLanguage, LANGUAGE_OPTIONS, type Language } from './comparator.utils'
-import { Columns2, AlignLeft, Trash2 } from 'lucide-react'
+import { useHashState } from '../../hooks/useHashState'
+import { Columns2, AlignLeft, Trash2, ScanText } from 'lucide-react'
 
 export function Comparator() {
   const [left, setLeft] = useLocalStorage('ss:comparator:left', '')
@@ -17,7 +20,14 @@ export function Comparator() {
   const [inline, setInline] = useState(false)
   const [ignoreWhitespace, setIgnoreWhitespace] = useState(false)
   const [ignoreCase, setIgnoreCase] = useState(false)
+  const [charDiff, setCharDiff] = useState(false)
   const [mode, setMode] = useState<'input' | 'diff'>('input')
+
+  useHashState<{ l: string; r: string }>((state) => {
+    if (state.l !== undefined) setLeft(state.l)
+    if (state.r !== undefined) setRight(state.r)
+    if (state.l !== undefined && state.r !== undefined) setMode('diff')
+  })
 
   useEffect(() => {
     if (autoDetect) setLanguage(detectLanguage(left || right))
@@ -33,6 +43,8 @@ export function Comparator() {
 
   useKeyboardShortcut('Enter', handleToggleMode, { alt: true })
   useKeyboardShortcut('i', () => setInline((v) => !v), { alt: true })
+
+  const getShareData = useCallback(() => ({ l: left, r: right }), [left, right])
 
   // Normalize once for ignoreCase so DiffStats and DiffView share the same values
   const [diffLeft, diffRight] = useMemo(
@@ -107,6 +119,17 @@ export function Comparator() {
 
         <div className="flex-1" />
 
+        <Button
+          size="md"
+          variant={charDiff ? 'accent' : 'default'}
+          onClick={() => setCharDiff((v) => !v)}
+          title={charDiff ? 'Switch to line diff' : 'Switch to character diff'}
+        >
+          <ScanText size={12} />
+          Char
+        </Button>
+
+        <ShareButton getData={getShareData} size="md" />
         <Button variant="ghost" size="md" onClick={handleClear} disabled={!left && !right} title="Clear both inputs">
           <Trash2 size={12} />
           Clear
@@ -131,6 +154,8 @@ export function Comparator() {
           <div className="w-px shrink-0" style={{ background: 'var(--border)' }} />
           <InputPanel label="Text B — Modified" value={right} onChange={setRight} language={language} />
         </div>
+      ) : charDiff ? (
+        <CharDiffView original={diffLeft} modified={diffRight} inline={inline} />
       ) : (
         <DiffView
           original={diffLeft}

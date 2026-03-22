@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { GitCompare, Braces, Type, ArrowRight, Zap, Lock, HardDrive } from 'lucide-react'
+import { GitCompare, Braces, Type, Monitor, ArrowRight, Zap, Lock, HardDrive } from 'lucide-react'
 
 const tools = [
   {
@@ -40,6 +40,19 @@ const tools = [
     border: 'rgba(245,158,11,0.18)',
     borderHover: 'rgba(245,158,11,0.5)',
     tags: ['22 operations', 'regex support', 'chained transforms'],
+  },
+  {
+    id: 'html',
+    path: '/html',
+    Icon: Monitor,
+    name: 'HTML Simulator',
+    tagline: '<live /> preview',
+    description: 'Paste HTML and see it rendered instantly in a sandboxed browser preview. Supports CSS and JavaScript.',
+    accent: '#06b6d4',
+    glow: 'rgba(6,182,212,0.15)',
+    border: 'rgba(6,182,212,0.18)',
+    borderHover: 'rgba(6,182,212,0.5)',
+    tags: ['Live Preview', 'Sandbox', 'HTML/CSS/JS'],
   },
 ]
 
@@ -150,7 +163,7 @@ export function Home() {
         className="relative z-10 w-full mx-auto animate-fade-up delay-300"
         style={{ flex: '0 0 auto', padding: '0 clamp(1.5rem, 4vw, 4rem) clamp(1.25rem, 3vh, 2.5rem)', maxWidth: '1100px', alignSelf: 'center' }}
       >
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
           {tools.map(({ id, path, Icon, name, tagline, description, accent, glow, border, borderHover, tags }) => (
             <ToolCard
               key={id}
@@ -186,7 +199,7 @@ export function Home() {
             <span style={{ color: 'var(--border)' }}>·</span>
             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>v1.0</span>
             <span style={{ color: 'var(--border)' }}>·</span>
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Three tools. One tab. Zero backend.</span>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Four tools. One tab. Zero backend.</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
             <Lock size={11} aria-hidden />

@@ -7,9 +7,11 @@ import { ResizeHandle } from '../../components/ui/ResizeHandle'
 import { Kbd } from '../../components/ui/Kbd'
 import { JsonEditor } from './JsonEditor'
 import { JsonOutput } from './JsonOutput'
+import { JsonTreeView } from './JsonTreeView'
 import { JsonToolbar } from './JsonToolbar'
 import { JsonErrorBanner } from './JsonErrorBanner'
 import { formatJson, fixJson, minifyJson, validateJson } from './json-studio.utils'
+import { useHashState } from '../../hooks/useHashState'
 
 const PANE_LABEL = 'px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase'
 
@@ -24,7 +26,10 @@ export function JsonStudio() {
   const [indent, setIndent] = useState<2 | 4>(2)
   const [error, setError] = useState<{ message: string; line?: number; col?: number } | null>(null)
   const [minifyStats, setMinifyStats] = useState<MinifyStats | null>(null)
+  const [outputView, setOutputView] = useState<'raw' | 'tree'>('raw')
   const { percent, containerRef, startDrag } = useResizable(50)
+
+  useHashState<{ i: string }>((state) => { if (state.i !== undefined) setInput(state.i) })
 
   const handleInputChange = useCallback(
     (value: string) => {
@@ -76,6 +81,8 @@ export function JsonStudio() {
     ? Math.round((1 - minifyStats.minifiedBytes / minifyStats.originalBytes) * 100)
     : null
 
+  const getShareData = useCallback(() => ({ i: input }), [input])
+
   return (
     <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
       <JsonToolbar
@@ -86,6 +93,9 @@ export function JsonStudio() {
         output={output}
         indent={indent}
         onIndentChange={setIndent}
+        outputView={outputView}
+        onOutputViewChange={setOutputView}
+        getShareData={getShareData}
       />
 
       {error && (
@@ -146,7 +156,11 @@ export function JsonStudio() {
             )}
           </div>
           {output ? (
-            <JsonOutput value={output} />
+            outputView === 'tree' ? (
+              <JsonTreeView value={output} />
+            ) : (
+              <JsonOutput value={output} />
+            )
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center gap-3">
               <div
