@@ -90,3 +90,8 @@ npm run preview  # preview the production build locally
 The project includes a `vercel.json` that rewrites all routes to `index.html` for client-side routing. Deploy by connecting the repo to Vercel — no configuration needed.
 
 For other static hosts, apply the same SPA rewrite rule (all paths → `index.html`).
+
+---
+
+## License
+MIT
