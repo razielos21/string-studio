@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { GitCompare, Braces, Type, Monitor, ArrowRight, Zap, Lock, HardDrive } from 'lucide-react'
+import { GitCompare, Braces, Type, Monitor, KeySquare, ArrowRight, Zap, Lock, HardDrive } from 'lucide-react'
 
 const tools = [
   {
@@ -54,7 +54,22 @@ const tools = [
     borderHover: 'rgba(6,182,212,0.5)',
     tags: ['Live Preview', 'Sandbox', 'HTML/CSS/JS'],
   },
+  {
+    id: 'jwt',
+    path: '/jwt',
+    Icon: KeySquare,
+    name: 'JWT Decoder',
+    tagline: 'header · payload · sig',
+    description: 'Decode any JWT instantly — inspect header, payload, and signature in three panels. Highlights expiry status relative to now.',
+    accent: '#a855f7',
+    glow: 'rgba(168,85,247,0.15)',
+    border: 'rgba(168,85,247,0.18)',
+    borderHover: 'rgba(168,85,247,0.5)',
+    tags: ['decode only', 'exp highlight', 'no backend'],
+  },
 ]
+
+const CARD_HEIGHT = '370px'
 
 const perks = [
   { Icon: Zap,       label: 'Instant',    desc: 'Runs entirely in your browser' },
@@ -67,7 +82,7 @@ export function Home() {
 
   return (
     <div
-      className="flex flex-col overflow-y-auto overflow-x-hidden min-h-full"
+      className="flex flex-col overflow-y-auto overflow-x-hidden h-full"
       style={{ background: 'var(--bg-base)', position: 'relative' }}
     >
       {/* Radial glow */}
@@ -163,7 +178,7 @@ export function Home() {
         className="relative z-10 w-full mx-auto animate-fade-up delay-300"
         style={{ flex: '0 0 auto', padding: '0 clamp(1.5rem, 4vw, 4rem) clamp(1.25rem, 3vh, 2.5rem)', maxWidth: '1100px', alignSelf: 'center' }}
       >
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3" style={{ gridAutoRows: CARD_HEIGHT }}>
           {tools.map(({ id, path, Icon, name, tagline, description, accent, glow, border, borderHover, tags }) => (
             <ToolCard
               key={id}
@@ -199,7 +214,7 @@ export function Home() {
             <span style={{ color: 'var(--border)' }}>·</span>
             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>v1.0</span>
             <span style={{ color: 'var(--border)' }}>·</span>
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Four tools. One tab. Zero backend.</span>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Five tools. One tab. Zero backend.</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
             <Lock size={11} aria-hidden />
@@ -230,7 +245,7 @@ function ToolCard({ path, Icon, name, tagline, description, accent, glow, border
   return (
     <button
       onClick={() => onNavigate(path)}
-      className="tool-card group relative flex flex-col gap-5 rounded-2xl text-left cursor-pointer transition-all duration-200 overflow-hidden"
+      className="tool-card group relative flex flex-col gap-5 rounded-2xl text-left cursor-pointer transition-all duration-200 overflow-hidden h-full"
       style={{
         padding: 'clamp(1.25rem, 2.5vw, 1.75rem)',
         background: 'rgba(255,255,255,0.025)',
@@ -244,12 +259,13 @@ function ToolCard({ path, Icon, name, tagline, description, accent, glow, border
       } as React.CSSProperties}
       aria-label={`Open ${name}`}
     >
-      {/* Corner glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: glow }}
-      />
+      {/* overflow-hidden here clips the blur filter so it can't bleed into adjacent cards */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+        <div
+          className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{ background: glow }}
+        />
+      </div>
 
       {/* Icon */}
       <div

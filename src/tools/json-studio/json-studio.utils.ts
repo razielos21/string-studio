@@ -11,6 +11,11 @@ export interface JsonError {
   col?: number
 }
 
+export function buildJsonPath(parentPath: string, key: string, isArray: boolean): string {
+  if (isArray) return parentPath ? `${parentPath}[${key}]` : `[${key}]`
+  return parentPath ? `${parentPath}.${key}` : key
+}
+
 export function validateJson(input: string): JsonError | null {
   if (!input.trim()) return null
   try {
