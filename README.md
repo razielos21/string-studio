@@ -4,6 +4,8 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 
 **No backend. No accounts. Data never leaves your machine.**
 
+**Live demo: [string-studio.vercel.app](https://string-studio.vercel.app/)**
+
 ---
 
 ## Tools
@@ -30,13 +32,25 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 - **Lines**: Sort A→Z, Sort Z→A, remove duplicates, reverse, add line numbers
 - **Encoding**: Base64 encode/decode, URL encode/decode, HTML escape/unescape
 
+### HTML Simulator
+- Paste HTML and see it rendered instantly in a sandboxed iframe
+- Supports inline CSS and JavaScript
+- Resizable editor/preview split pane
+
+### JWT Decoder
+- Paste any JWT to decode header, payload, and signature into three panels
+- Highlights expiry (`exp`) relative to now — valid / expires soon / expired
+- Decode-only — no secret key required or accepted
+- Hover any JSON node in the tree view to copy its dot-path (e.g. `user.address.city`)
+
 ---
 
 ## Features
 
 - **Persistent** — editor content survives page refresh via `localStorage`
+- **Keyboard shortcuts** — `Alt+1–5` to jump between tools, `?` for shortcut reference
 - **Keyboard accessible** — all interactive elements reachable by tab, focus indicators on every control
-- **Dark only** — OLED-friendly deep dark theme with per-tool accent colors
+- **Dark only** — OLED-friendly deep dark theme with per-tool accent colors (green / indigo / amber / cyan / purple)
 
 ---
 
