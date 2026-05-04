@@ -15,7 +15,7 @@ export function ShareButton({ getData, size = 'md' }: ShareButtonProps) {
     <Button
       variant="ghost"
       size={size}
-      onClick={() => copy(buildShareUrl(getData()))}
+      onClick={async () => copy(await buildShareUrl(getData()))}
       title="Copy shareable link"
     >
       {copied ? <Check size={13} /> : <Share2 size={13} />}

@@ -7,8 +7,9 @@ export function useHashState<T>(onLoad: (state: T) => void): void {
   useLayoutEffect(() => {
     const hash = window.location.hash.slice(1)
     if (!hash) return
-    const state = decodeState<T>(hash)
-    if (state !== null) onLoadRef.current(state)
-    clearHash()
+    decodeState<T>(hash).then(state => {
+      if (state !== null) onLoadRef.current(state)
+      clearHash()
+    })
   }, [])
 }
