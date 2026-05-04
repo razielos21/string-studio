@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut'
 import { InputPanel } from './InputPanel'
-import { DiffView } from './DiffView'
 import { CharDiffView } from './CharDiffView'
 import { DiffStats } from './DiffStats'
 import { Select } from '../../components/ui/Select'
@@ -46,11 +45,15 @@ export function Comparator() {
 
   const getShareData = useCallback(() => ({ l: left, r: right }), [left, right])
 
-  // Normalize once for ignoreCase so DiffStats and DiffView share the same values
-  const [diffLeft, diffRight] = useMemo(
-    () => ignoreCase ? [left.toLowerCase(), right.toLowerCase()] : [left, right],
-    [left, right, ignoreCase],
-  )
+  const [diffLeft, diffRight] = useMemo(() => {
+    let l = ignoreCase ? left.toLowerCase() : left
+    let r = ignoreCase ? right.toLowerCase() : right
+    if (ignoreWhitespace) {
+      l = l.split('\n').map(line => line.trim()).join('\n')
+      r = r.split('\n').map(line => line.trim()).join('\n')
+    }
+    return [l, r]
+  }, [left, right, ignoreCase, ignoreWhitespace])
 
   return (
     <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
@@ -123,10 +126,10 @@ export function Comparator() {
           size="md"
           variant={charDiff ? 'accent' : 'default'}
           onClick={() => setCharDiff((v) => !v)}
-          title={charDiff ? 'Switch to line diff' : 'Switch to character diff'}
+          title={charDiff ? 'Switch to word diff' : 'Switch to char diff'}
         >
           <ScanText size={12} />
-          Char
+          {charDiff ? 'Char' : 'Word'}
         </Button>
 
         <ShareButton getData={getShareData} size="md" />
@@ -154,16 +157,8 @@ export function Comparator() {
           <div className="w-px shrink-0" style={{ background: 'var(--border)' }} />
           <InputPanel label="Text B — Modified" value={right} onChange={setRight} language={language} />
         </div>
-      ) : charDiff ? (
-        <CharDiffView original={diffLeft} modified={diffRight} inline={inline} />
       ) : (
-        <DiffView
-          original={diffLeft}
-          modified={diffRight}
-          language={language}
-          inline={inline}
-          ignoreWhitespace={ignoreWhitespace}
-        />
+        <CharDiffView original={diffLeft} modified={diffRight} inline={inline} granularity={charDiff ? 'char' : 'word'} />
       )}
     </div>
   )

@@ -1,11 +1,13 @@
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Wrench } from 'lucide-react'
+import { Button } from '../../components/ui/Button'
 import { type JsonError } from './json-studio.utils'
 
 interface JsonErrorBannerProps {
   error: JsonError
+  onFix: () => void
 }
 
-export function JsonErrorBanner({ error }: JsonErrorBannerProps) {
+export function JsonErrorBanner({ error, onFix }: JsonErrorBannerProps) {
   return (
     <div className="flex items-start gap-2 px-3 py-2 bg-[var(--error)]/10 border border-[var(--error)]/30 rounded text-sm">
       <AlertTriangle size={14} className="text-[var(--error)] mt-0.5 shrink-0" />
@@ -19,6 +21,10 @@ export function JsonErrorBanner({ error }: JsonErrorBannerProps) {
         )}
         <p className="text-[var(--text-secondary)] text-xs mt-0.5 break-all">{error.message}</p>
       </div>
+      <Button variant="error" size="sm" onClick={onFix} title="Attempt to auto-repair JSON (Alt+X)">
+        <Wrench size={11} />
+        Try Fix
+      </Button>
     </div>
   )
 }

@@ -100,7 +100,7 @@ export function JsonStudio() {
 
       {error && (
         <div className="px-3 pt-2.5 shrink-0">
-          <JsonErrorBanner error={error} />
+          <JsonErrorBanner error={error} onFix={handleFix} />
         </div>
       )}
 

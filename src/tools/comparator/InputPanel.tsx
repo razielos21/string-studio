@@ -34,7 +34,7 @@ export function InputPanel({ label, value, onChange, language }: InputPanelProps
             fontSize: 13,
             lineNumbers: 'on',
             scrollBeyondLastLine: false,
-            wordWrap: 'off',
+            wordWrap: 'on',
             scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
             fixedOverflowWidgets: true,
             find: { addExtraSpaceOnTop: false },

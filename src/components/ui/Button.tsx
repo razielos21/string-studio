@@ -2,7 +2,7 @@ import { cn } from '../../lib/cn'
 import { type ButtonHTMLAttributes, forwardRef } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'ghost' | 'accent'
+  variant?: 'default' | 'ghost' | 'accent' | 'error'
   size?: 'sm' | 'md'
 }
 
@@ -19,6 +19,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             'text-(--text-secondary) hover:bg-white/6 hover:text-(--text-primary)',
           variant === 'accent' &&
             'bg-(--accent) text-white hover:bg-(--accent-hover) shadow-[0_0_16px_var(--accent-glow)]',
+          variant === 'error' &&
+            'bg-[rgba(239,68,68,0.12)] text-(--error) hover:bg-[rgba(239,68,68,0.22)] border border-[rgba(239,68,68,0.3)]',
           size === 'sm' && 'text-xs px-2.5 py-1 h-7 gap-1',
           size === 'md' && 'text-sm px-3 py-1.5 h-8',
           className,
