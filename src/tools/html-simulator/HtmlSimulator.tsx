@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useAsyncAction } from '../../hooks/useAsyncAction'
 import { FileDown, Monitor, Trash2, Zap } from 'lucide-react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useResizable } from '../../hooks/useResizable'
@@ -7,7 +8,7 @@ import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { CodeEditor } from '../../components/ui/CodeEditor'
 import { SandboxPreview } from '../../components/ui/SandboxPreview'
-import { exportPdf } from '../../lib/exportPdf'
+import { exportHtmlPdf } from '../../lib/exportHtmlPdf'
 import { PANE_LABEL } from '../../lib/styles'
 
 const DEFAULT_HTML = `<!DOCTYPE html>
@@ -32,6 +33,9 @@ export function HtmlSimulator() {
   const [liveHtml, setLiveHtml] = useState(input)
   const { percent, containerRef, startDrag } = useResizable(50)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { isPending: isPdfLoading, run: handleExportPdf } = useAsyncAction(
+    useCallback(() => exportHtmlPdf(liveHtml), [liveHtml])
+  )
 
   useEffect(() => {
     if (!livePreview) return
@@ -88,9 +92,16 @@ export function HtmlSimulator() {
 
         <div className="flex-1" />
 
-        <Button variant="ghost" size="md" onClick={() => exportPdf(liveHtml)} title="Export to PDF" style={{ color: '#06b6d4' } as React.CSSProperties}>
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={handleExportPdf}
+          disabled={isPdfLoading}
+          title="Export to PDF"
+          style={{ color: '#06b6d4' } as React.CSSProperties}
+        >
           <FileDown size={14} />
-          Export PDF
+          {isPdfLoading ? 'Generating…' : 'Export PDF'}
         </Button>
         <CopyButton text={input} size="md" />
         <Button variant="ghost" size="md" onClick={handleClear} title="Reset to default">
@@ -127,7 +138,7 @@ export function HtmlSimulator() {
             emptyTitle="No HTML yet"
             emptySubtitle="Type or paste HTML to see a live preview"
             rgb="6,182,212"
-            sandbox="allow-scripts allow-forms allow-modals"
+            sandbox="allow-scripts allow-forms allow-modals allow-popups"
           />
         </div>
       </div>

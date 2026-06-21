@@ -9,6 +9,8 @@ export function buildMarkdownDoc(md: string): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Markdown Preview</title>
+<base target="_blank" rel="noopener noreferrer">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;padding:2rem 2.5rem;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;line-height:1.75;color:#1a1a2e;background:#ffffff;max-width:860px;margin-left:auto;margin-right:auto}
@@ -32,6 +34,7 @@ th{background:#f8fafc;font-weight:600}
 tr:nth-child(even){background:#fafafa}
 img{max-width:100%;height:auto;border-radius:6px}
 hr{border:none;border-top:1px solid #e2e8f0;margin:2em 0}
+@media print{body{max-width:none;padding:0 1cm}}
 </style>
 </head>
 <body>${html}</body>

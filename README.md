@@ -4,7 +4,7 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 
 **No backend. No accounts. Data never leaves your machine.**
 
-**Live: [string-studio.vercel.app](https://www.stringstudio.dev/)**
+**Live: [stringstudio.dev](https://www.stringstudio.dev/)**
 
 ---
 

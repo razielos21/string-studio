@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useAsyncAction } from '../../hooks/useAsyncAction'
 import { FileDown, FileText, Trash2, Zap } from 'lucide-react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useResizable } from '../../hooks/useResizable'
@@ -8,7 +9,7 @@ import { CopyButton } from '../../components/ui/CopyButton'
 import { CodeEditor } from '../../components/ui/CodeEditor'
 import { SandboxPreview } from '../../components/ui/SandboxPreview'
 import { buildMarkdownDoc } from './markdown-preview.utils'
-import { exportPdf } from '../../lib/exportPdf'
+import { downloadMarkdownPdf } from './markdownToPdf'
 import { PANE_LABEL } from '../../lib/styles'
 
 const DEFAULT_MD = `# Welcome to Markdown Preview
@@ -45,6 +46,9 @@ export function MarkdownPreview() {
   const { percent, containerRef, startDrag } = useResizable(50)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isFirstRender = useRef(true)
+  const { isPending: isPdfLoading, run: handleExportPdf } = useAsyncAction(
+    useCallback(() => downloadMarkdownPdf(input), [input])
+  )
 
   useEffect(() => {
     if (isFirstRender.current) { isFirstRender.current = false; return }
@@ -98,9 +102,16 @@ export function MarkdownPreview() {
 
         <div className="flex-1" />
 
-        <Button variant="ghost" size="md" onClick={() => exportPdf(doc)} title="Export to PDF" style={{ color: '#f43f5e' } as React.CSSProperties}>
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={handleExportPdf}
+          disabled={isPdfLoading}
+          title="Export to PDF"
+          style={{ color: '#f43f5e' } as React.CSSProperties}
+        >
           <FileDown size={14} />
-          Export PDF
+          {isPdfLoading ? 'Generating…' : 'Export PDF'}
         </Button>
 
         <CopyButton text={input} size="md" />
@@ -138,6 +149,7 @@ export function MarkdownPreview() {
             emptyTitle="No Markdown yet"
             emptySubtitle="Type or paste Markdown to see a live preview"
             rgb="244,63,94"
+            sandbox="allow-scripts allow-popups"
           />
         </div>
       </div>
