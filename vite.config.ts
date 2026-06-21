@@ -10,6 +10,7 @@ export default defineConfig({
   base: '/',
   define: {
     __APP_VERSION__: JSON.stringify(version),
+    global: 'window', // pdfmake references Node's `global`; shim it at build time
   },
   plugins: [
     tailwindcss(),

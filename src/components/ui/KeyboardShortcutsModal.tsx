@@ -22,6 +22,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { keys: ['Alt', '3'], description: 'Go to Text Playground' },
       { keys: ['Alt', '4'], description: 'Go to HTML Simulator' },
       { keys: ['Alt', '5'], description: 'Go to JWT Decoder' },
+      { keys: ['Alt', '6'], description: 'Go to Markdown Preview' },
     ],
   },
   {

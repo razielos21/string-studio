@@ -4,7 +4,7 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 
 **No backend. No accounts. Data never leaves your machine.**
 
-**Live demo: [string-studio.vercel.app](https://string-studio.vercel.app/)**
+**Live: [stringstudio.dev](https://www.stringstudio.dev/)**
 
 ---
 
@@ -16,13 +16,14 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 - Minify to a single line
 - Live parse-error banner with exact line and column numbers
 - Copy output to clipboard
+- Tree view with hover-to-copy dot-path on any node (e.g. `user.address.city`)
 
 ### Comparator
 - Side-by-side or inline diff powered by Monaco DiffEditor
 - Auto-detects language (JSON, TypeScript, JavaScript, HTML, CSS, Python, SQL, YAML, Markdown, Shell)
 - Manual language override
 - Diff stats bar showing lines added / removed / unchanged
-- Ignore whitespace toggle
+- Ignore whitespace and ignore case toggles
 
 ### Text Playground
 - 22 string operations, applied on click and chainable — each operation runs on the previous output
@@ -35,22 +36,31 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 ### HTML Simulator
 - Paste HTML and see it rendered instantly in a sandboxed iframe
 - Supports inline CSS and JavaScript
+- Live preview toggle (debounced 300ms) or manual Preview button
 - Resizable editor/preview split pane
+- Export to PDF via browser print dialog
+
+### Markdown Preview
+- Live Markdown preview with GitHub Flavored Markdown (GFM) — tables, code blocks, blockquotes, strikethrough
+- Monaco editor with Markdown language support
+- Live preview toggle (debounced 300ms) or manual Preview button
+- Resizable editor/preview split pane
+- Export to PDF via browser print dialog
 
 ### JWT Decoder
 - Paste any JWT to decode header, payload, and signature into three panels
 - Highlights expiry (`exp`) relative to now — valid / expires soon / expired
 - Decode-only — no secret key required or accepted
-- Hover any JSON node in the tree view to copy its dot-path (e.g. `user.address.city`)
+- Hover any JSON node in the tree view to copy its dot-path
 
 ---
 
 ## Features
 
 - **Persistent** — editor content survives page refresh via `localStorage`
-- **Keyboard shortcuts** — `Alt+1–5` to jump between tools, `?` for shortcut reference
+- **Keyboard shortcuts** — `Alt+1–6` to jump between tools, `?` for shortcut reference
 - **Keyboard accessible** — all interactive elements reachable by tab, focus indicators on every control
-- **Dark only** — OLED-friendly deep dark theme with per-tool accent colors (green / indigo / amber / cyan / purple)
+- **Dark only** — OLED-friendly deep dark theme with per-tool accent colors (green / indigo / amber / cyan / rose / purple)
 
 ---
 
@@ -64,6 +74,7 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 | Editors | `@monaco-editor/react` (VS Code engine) |
 | JSON repair | `jsonrepair` |
 | Diff stats | `diff` (jsdiff) |
+| Markdown | `marked` (GFM) |
 | Icons | `lucide-react` |
 | Routing | `react-router-dom` v7 |
 

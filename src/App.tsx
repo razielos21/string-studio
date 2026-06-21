@@ -7,12 +7,13 @@ import { JsonStudio } from './tools/json-studio/JsonStudio'
 import { TextPlayground } from './tools/text-playground/TextPlayground'
 import { HtmlSimulator } from './tools/html-simulator/HtmlSimulator'
 import { JwtDecoder } from './tools/jwt-decoder/JwtDecoder'
+import { MarkdownPreview } from './tools/markdown-preview/MarkdownPreview'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ToastProvider, useToast } from './context/ToastContext'
 import { ToastContainer } from './components/ui/Toast'
 import { KeyboardShortcutsModal } from './components/ui/KeyboardShortcutsModal'
 import { useKeyboardShortcut } from './hooks/useKeyboardShortcut'
-import { Braces, GitCompare, Type, Monitor, KeySquare, ChevronRight } from 'lucide-react'
+import { Braces, GitCompare, Type, Monitor, KeySquare, FileText, ChevronRight } from 'lucide-react'
 
 const TOOL_META: Record<string, { label: string; Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>; color: string; hex: string }> = {
   '/json':       { label: 'JSON Studio',    Icon: Braces,     color: 'var(--json-accent)', hex: '#10b981' },
@@ -20,6 +21,7 @@ const TOOL_META: Record<string, { label: string; Icon: React.ComponentType<{ siz
   '/text':       { label: 'Text Playground',Icon: Type,       color: 'var(--text-accent)', hex: '#f59e0b' },
   '/html':       { label: 'HTML Simulator', Icon: Monitor,    color: 'var(--html-accent)', hex: '#06b6d4' },
   '/jwt':        { label: 'JWT Decoder',    Icon: KeySquare,  color: 'var(--jwt-accent)',  hex: '#a855f7' },
+  '/markdown':   { label: 'Markdown',       Icon: FileText,   color: 'var(--md-accent)',   hex: '#f43f5e' },
 }
 
 function ToolHeader({ pathname }: { pathname: string }) {
@@ -67,6 +69,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/text':       'Text Playground - String Studio',
   '/html':       'HTML Simulator - String Studio',
   '/jwt':        'JWT Decoder - String Studio',
+  '/markdown':   'Markdown - String Studio',
 }
 
 function StorageErrorListener() {
@@ -92,6 +95,7 @@ function GlobalShortcuts({ onOpenShortcuts }: { onOpenShortcuts: () => void }) {
   useKeyboardShortcut('3', () => navigate('/text'),       { alt: true })
   useKeyboardShortcut('4', () => navigate('/html'),       { alt: true })
   useKeyboardShortcut('5', () => navigate('/jwt'),        { alt: true })
+  useKeyboardShortcut('6', () => navigate('/markdown'),   { alt: true })
 
   return null
 }
@@ -174,6 +178,14 @@ function Layout() {
               element={
                 <ErrorBoundary toolName="JWT Decoder">
                   <JwtDecoder />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/markdown"
+              element={
+                <ErrorBoundary toolName="Markdown">
+                  <MarkdownPreview />
                 </ErrorBoundary>
               }
             />
