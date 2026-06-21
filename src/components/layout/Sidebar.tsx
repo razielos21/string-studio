@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { GitCompare, Braces, Type, Home, Monitor, KeySquare } from 'lucide-react'
+import { GitCompare, Braces, Type, Home, Monitor, KeySquare, FileText } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
 declare const __APP_VERSION__: string
@@ -9,6 +9,7 @@ const tools = [
   { path: '/comparator', label: 'Comparator',        shortLabel: 'Diff',  Icon: GitCompare, color: 'var(--diff-accent)' },
   { path: '/text',       label: 'Text Playground',   shortLabel: 'Text',  Icon: Type,       color: 'var(--text-accent)' },
   { path: '/html',       label: 'HTML Simulator',    shortLabel: 'HTML',  Icon: Monitor,    color: 'var(--html-accent)' },
+  { path: '/markdown',   label: 'Markdown Preview',   shortLabel: 'MD',    Icon: FileText,   color: 'var(--md-accent)'   },
   { path: '/jwt',        label: 'JWT Decoder',        shortLabel: 'JWT',   Icon: KeySquare,  color: 'var(--jwt-accent)'  },
 ]
 

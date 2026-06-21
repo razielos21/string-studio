@@ -6,9 +6,7 @@ import { CharDiffView } from './CharDiffView'
 import { DiffStats } from './DiffStats'
 import { Select } from '../../components/ui/Select'
 import { Button } from '../../components/ui/Button'
-import { ShareButton } from '../../components/ui/ShareButton'
 import { detectLanguage, LANGUAGE_OPTIONS, type Language } from './comparator.utils'
-import { useHashState } from '../../hooks/useHashState'
 import { Columns2, AlignLeft, Trash2, ScanText } from 'lucide-react'
 
 export function Comparator() {
@@ -21,12 +19,6 @@ export function Comparator() {
   const [ignoreCase, setIgnoreCase] = useState(false)
   const [charDiff, setCharDiff] = useState(false)
   const [mode, setMode] = useState<'input' | 'diff'>('input')
-
-  useHashState<{ l: string; r: string }>((state) => {
-    if (state.l !== undefined) setLeft(state.l)
-    if (state.r !== undefined) setRight(state.r)
-    if (state.l !== undefined && state.r !== undefined) setMode('diff')
-  })
 
   useEffect(() => {
     if (autoDetect) setLanguage(detectLanguage(left || right))
@@ -42,8 +34,6 @@ export function Comparator() {
 
   useKeyboardShortcut('Enter', handleToggleMode, { alt: true })
   useKeyboardShortcut('i', () => setInline((v) => !v), { alt: true })
-
-  const getShareData = useCallback(() => ({ l: left, r: right }), [left, right])
 
   const [diffLeft, diffRight] = useMemo(() => {
     let l = ignoreCase ? left.toLowerCase() : left
@@ -132,7 +122,6 @@ export function Comparator() {
           {charDiff ? 'Char' : 'Word'}
         </Button>
 
-        <ShareButton getData={getShareData} size="md" />
         <Button variant="ghost" size="md" onClick={handleClear} disabled={!left && !right} title="Clear both inputs">
           <Trash2 size={12} />
           Clear
