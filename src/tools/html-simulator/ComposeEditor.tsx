@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { ComposeToolbar, type ActiveFormats } from './ComposeToolbar'
-import { FORMAT_BLOCK_OPTIONS, DEFAULT_HIGHLIGHT_COLOR, rgbToHex, sanitizeHtml, type ComposeLang } from './compose.utils'
+import { FORMAT_BLOCK_OPTIONS, DEFAULT_HIGHLIGHT_COLOR, rgbToHex, sanitizeHtml, familyForFont, type ComposeLang, type ComposeFont } from './compose.utils'
 
 const DEFAULT_FORMATS: ActiveFormats = {
   bold: false,
@@ -22,11 +22,13 @@ interface ComposeEditorProps {
   lang: ComposeLang
   dir: 'ltr' | 'rtl'
   onLangChange: (lang: ComposeLang) => void
+  font: ComposeFont
+  onFontChange: (font: ComposeFont) => void
 }
 
 const HISTORY_LIMIT = 100
 
-export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: ComposeEditorProps) {
+export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange, font, onFontChange }: ComposeEditorProps) {
   const editableRef = useRef<HTMLDivElement>(null)
   const savedRange = useRef<Range | null>(null)
   const lastEmitted = useRef(body)
@@ -329,6 +331,8 @@ export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: C
         onInsertImage={insertImage}
         lang={lang}
         onLangChange={onLangChange}
+        font={font}
+        onFontChange={onFontChange}
       />
       <div
         ref={editableRef}
@@ -338,7 +342,7 @@ export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: C
         lang={lang}
         data-placeholder="Start typing…"
         className="compose-editable flex-1 min-h-0 overflow-y-auto px-4 py-3 text-sm outline-none"
-        style={{ color: 'var(--text-primary)' }}
+        style={{ color: 'var(--text-primary)', fontFamily: familyForFont(font) }}
         onInput={emitChange}
         onPaste={handlePaste}
         onFocus={updateActiveFormats}

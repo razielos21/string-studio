@@ -9,6 +9,41 @@ export function dirForLang(lang: string): 'ltr' | 'rtl' {
   return LANGUAGE_OPTIONS.find((o) => o.value === lang)?.dir ?? 'ltr'
 }
 
+export type ComposeFont =
+  | 'sans'
+  | 'serif'
+  | 'mono'
+  | 'inter'
+  | 'poppins'
+  | 'arial'
+  | 'times'
+  | 'georgia'
+  | 'verdana'
+  | 'courier'
+  | 'david'
+  | 'miriam'
+  | 'arial-hebrew'
+
+export const FONT_OPTIONS: { value: ComposeFont; label: string; family: string }[] = [
+  { value: 'sans', label: 'Sans-serif', family: 'sans-serif' },
+  { value: 'serif', label: 'Serif', family: 'serif' },
+  { value: 'mono', label: 'Monospace', family: "ui-monospace, 'SFMono-Regular', Menlo, monospace" },
+  { value: 'inter', label: 'Inter', family: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" },
+  { value: 'poppins', label: 'Poppins', family: "'Poppins', sans-serif" },
+  { value: 'arial', label: 'Arial', family: 'Arial, Helvetica, sans-serif' },
+  { value: 'times', label: 'Times New Roman', family: '"Times New Roman", Times, serif' },
+  { value: 'georgia', label: 'Georgia', family: 'Georgia, serif' },
+  { value: 'verdana', label: 'Verdana', family: 'Verdana, Geneva, sans-serif' },
+  { value: 'courier', label: 'Courier New', family: '"Courier New", Courier, monospace' },
+  { value: 'david', label: 'David (Hebrew)', family: '"David", "Times New Roman", serif' },
+  { value: 'miriam', label: 'Miriam (Hebrew)', family: '"Miriam", Arial, sans-serif' },
+  { value: 'arial-hebrew', label: 'Arial Hebrew', family: '"Arial Hebrew", Arial, sans-serif' },
+]
+
+export function familyForFont(font: ComposeFont): string {
+  return FONT_OPTIONS.find((o) => o.value === font)?.family ?? 'sans-serif'
+}
+
 const DEFAULT_TEXT_COLOR = '#f1f0ff'
 export const DEFAULT_HIGHLIGHT_COLOR = '#fef08a'
 
@@ -31,6 +66,7 @@ export const FORMAT_BLOCK_OPTIONS: { value: string; label: string; tag: string }
 // rather than remapped on every ComposeToolbar render.
 export const FORMAT_BLOCK_SELECT_OPTIONS = FORMAT_BLOCK_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 export const LANGUAGE_SELECT_OPTIONS = LANGUAGE_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
+export const FONT_SELECT_OPTIONS = FONT_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 
 const UNSAFE_TAGS = ['script', 'iframe', 'object', 'embed']
 
@@ -54,13 +90,13 @@ export function sanitizeHtml(html: string): string {
   return doc.body.innerHTML
 }
 
-export function buildHtmlDocument(bodyHtml: string, lang: string, dir: 'ltr' | 'rtl'): string {
+export function buildHtmlDocument(bodyHtml: string, lang: string, dir: 'ltr' | 'rtl', font: ComposeFont = 'sans'): string {
   return `<!DOCTYPE html>
 <html lang="${lang}" dir="${dir}">
 <head>
   <meta charset="UTF-8">
   <style>
-    body { font-family: sans-serif; padding: 2rem; }
+    body { font-family: ${familyForFont(font)}; padding: 2rem; }
     h1, h2, h3 { color: #06b6d4; }
     blockquote { border-${dir === 'rtl' ? 'right' : 'left'}: 3px solid rgba(6,182,212,0.4); margin: 0; padding-${dir === 'rtl' ? 'right' : 'left'}: 1rem; color: #6b7280; }
     ul, ol { padding-${dir === 'rtl' ? 'right' : 'left'}: 1.5rem; }

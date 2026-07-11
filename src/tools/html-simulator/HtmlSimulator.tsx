@@ -14,7 +14,7 @@ import { downloadFile } from '../../lib/downloadFile'
 import { activeAccentStyle } from '../../lib/styles'
 import { ComposeEditor } from './ComposeEditor'
 import { ComposeOutput } from './ComposeOutput'
-import { buildHtmlDocument, dirForLang, type ComposeLang } from './compose.utils'
+import { buildHtmlDocument, dirForLang, type ComposeLang, type ComposeFont } from './compose.utils'
 
 const DEFAULT_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -48,10 +48,11 @@ export function HtmlSimulator() {
 
   const [composeBody, setComposeBody] = useLocalStorage('ss:html:compose:body', '')
   const [composeLang, setComposeLang] = useLocalStorage<ComposeLang>('ss:html:compose:lang', 'en')
+  const [composeFont, setComposeFont] = useLocalStorage<ComposeFont>('ss:html:compose:font', 'sans')
   const composeDir = dirForLang(composeLang)
   const composeDoc = useMemo(
-    () => buildHtmlDocument(composeBody, composeLang, composeDir),
-    [composeBody, composeLang, composeDir],
+    () => buildHtmlDocument(composeBody, composeLang, composeDir, composeFont),
+    [composeBody, composeLang, composeDir, composeFont],
   )
   const composePreviewDoc = composeBody.trim() ? composeDoc : ''
 
@@ -193,6 +194,8 @@ export function HtmlSimulator() {
                   lang={composeLang}
                   dir={composeDir}
                   onLangChange={setComposeLang}
+                  font={composeFont}
+                  onFontChange={setComposeFont}
                 />
               </div>
 

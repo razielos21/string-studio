@@ -20,7 +20,7 @@ import {
 import { Select } from '../../components/ui/Select'
 import { ToolbarButton } from './ToolbarButton'
 import { UrlPopoverButton } from './UrlPopoverButton'
-import { FORMAT_BLOCK_SELECT_OPTIONS, LANGUAGE_SELECT_OPTIONS, type ComposeLang } from './compose.utils'
+import { FORMAT_BLOCK_SELECT_OPTIONS, LANGUAGE_SELECT_OPTIONS, FONT_SELECT_OPTIONS, type ComposeLang, type ComposeFont } from './compose.utils'
 
 export interface ActiveFormats {
   bold: boolean
@@ -50,6 +50,8 @@ interface ComposeToolbarProps {
   onInsertImage: (url: string) => void
   lang: ComposeLang
   onLangChange: (lang: ComposeLang) => void
+  font: ComposeFont
+  onFontChange: (font: ComposeFont) => void
 }
 
 export function ComposeToolbar({
@@ -66,6 +68,8 @@ export function ComposeToolbar({
   onInsertImage,
   lang,
   onLangChange,
+  font,
+  onFontChange,
 }: ComposeToolbarProps) {
   return (
     <div
@@ -179,6 +183,13 @@ export function ComposeToolbar({
       </ToolbarButton>
 
       <div className="flex-1" />
+
+      <Select
+        label="Font"
+        options={FONT_SELECT_OPTIONS}
+        value={font}
+        onChange={(e) => onFontChange(e.target.value as ComposeFont)}
+      />
 
       <Select
         label="Language"
