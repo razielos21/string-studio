@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 /** Two independent draggable boundaries splitting one container into three panes. */
 export function useTriResizable(initialLeft = 33, initialRight = 66, minWidth = 15) {
@@ -48,11 +48,8 @@ export function useTriResizable(initialLeft = 33, initialRight = 66, minWidth = 
     [minWidth],
   )
 
-  return {
-    leftPercent,
-    rightPercent,
-    containerRef,
-    startDragLeft: startDrag('left'),
-    startDragRight: startDrag('right'),
-  }
+  const startDragLeft = useMemo(() => startDrag('left'), [startDrag])
+  const startDragRight = useMemo(() => startDrag('right'), [startDrag])
+
+  return { leftPercent, rightPercent, containerRef, startDragLeft, startDragRight }
 }

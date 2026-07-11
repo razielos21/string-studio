@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react'
 import { Button } from '../../components/ui/Button'
+import { activeAccentStyle } from '../../lib/styles'
 
 interface ToolbarButtonProps {
   active?: boolean
@@ -20,11 +21,7 @@ export function ToolbarButton({ active, disabled, onClick, title, children }: To
       title={title}
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
-      style={
-        active
-          ? ({ color: '#06b6d4', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.25)' } as React.CSSProperties)
-          : undefined
-      }
+      style={active ? activeAccentStyle('#06b6d4', '6,182,212') : undefined}
     >
       {children}
     </Button>

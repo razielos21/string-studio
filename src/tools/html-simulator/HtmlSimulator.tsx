@@ -9,8 +9,9 @@ import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { CodeEditor } from '../../components/ui/CodeEditor'
 import { SandboxPreview } from '../../components/ui/SandboxPreview'
+import { PaneLabel } from '../../components/ui/PaneLabel'
 import { downloadFile } from '../../lib/downloadFile'
-import { PANE_LABEL } from '../../lib/styles'
+import { activeAccentStyle } from '../../lib/styles'
 import { ComposeEditor } from './ComposeEditor'
 import { ComposeOutput } from './ComposeOutput'
 import { buildHtmlDocument, dirForLang, type ComposeLang } from './compose.utils'
@@ -96,11 +97,7 @@ export function HtmlSimulator() {
             size="sm"
             onClick={() => setMode('preview')}
             title="Preview mode — write HTML, see it rendered"
-            style={
-              mode === 'preview'
-                ? ({ color: '#06b6d4', background: 'rgba(6,182,212,0.1)' } as React.CSSProperties)
-                : undefined
-            }
+            style={mode === 'preview' ? activeAccentStyle('#06b6d4', '6,182,212', false) : undefined}
           >
             <Monitor size={14} />
             Preview
@@ -110,11 +107,7 @@ export function HtmlSimulator() {
             size="sm"
             onClick={() => setMode('compose')}
             title="Compose mode — rich-text edit, generate HTML"
-            style={
-              mode === 'compose'
-                ? ({ color: '#06b6d4', background: 'rgba(6,182,212,0.1)' } as React.CSSProperties)
-                : undefined
-            }
+            style={mode === 'compose' ? activeAccentStyle('#06b6d4', '6,182,212', false) : undefined}
           >
             <PenLine size={14} />
             Compose
@@ -128,11 +121,7 @@ export function HtmlSimulator() {
               size="md"
               onClick={handleToggleLive}
               title={livePreview ? 'Live preview on — click to disable' : 'Live preview off — click to enable'}
-              style={
-                livePreview
-                  ? ({ color: '#06b6d4', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.25)' } as React.CSSProperties)
-                  : undefined
-              }
+              style={livePreview ? activeAccentStyle('#06b6d4', '6,182,212') : undefined}
             >
               <Zap size={14} />
               Live
@@ -175,24 +164,14 @@ export function HtmlSimulator() {
           {mode === 'preview' ? (
             <div ref={containerRef} className="flex flex-1 min-h-0">
               <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${percent}%` }}>
-                <div
-                  className={PANE_LABEL}
-                  style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(6,182,212,0.35)' }}
-                >
-                  HTML
-                </div>
+                <PaneLabel rgb="6,182,212">HTML</PaneLabel>
                 <CodeEditor value={input} onChange={setInput} language="html" formatOnPaste={false} />
               </div>
 
               <ResizeHandle onMouseDown={startDrag} />
 
               <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${100 - percent}%` }}>
-                <div
-                  className={PANE_LABEL}
-                  style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(6,182,212,0.35)' }}
-                >
-                  Preview
-                </div>
+                <PaneLabel rgb="6,182,212">Preview</PaneLabel>
                 <SandboxPreview
                   doc={liveHtml}
                   previewKey={previewKey}
@@ -207,12 +186,7 @@ export function HtmlSimulator() {
           ) : (
             <div ref={triContainerRef} className="flex flex-1 min-h-0">
               <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${leftPercent}%` }}>
-                <div
-                  className={PANE_LABEL}
-                  style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(6,182,212,0.35)' }}
-                >
-                  Compose
-                </div>
+                <PaneLabel rgb="6,182,212">Compose</PaneLabel>
                 <ComposeEditor
                   body={composeBody}
                   onChangeBody={setComposeBody}
@@ -225,24 +199,14 @@ export function HtmlSimulator() {
               <ResizeHandle onMouseDown={startDragLeft} />
 
               <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${rightPercent - leftPercent}%` }}>
-                <div
-                  className={PANE_LABEL}
-                  style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(6,182,212,0.35)' }}
-                >
-                  Generated HTML
-                </div>
+                <PaneLabel rgb="6,182,212">Generated HTML</PaneLabel>
                 <ComposeOutput value={composeDoc} />
               </div>
 
               <ResizeHandle onMouseDown={startDragRight} />
 
               <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${100 - rightPercent}%` }}>
-                <div
-                  className={PANE_LABEL}
-                  style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(6,182,212,0.35)' }}
-                >
-                  Preview
-                </div>
+                <PaneLabel rgb="6,182,212">Preview</PaneLabel>
                 <SandboxPreview
                   doc={composePreviewDoc}
                   emptyIcon={Monitor}

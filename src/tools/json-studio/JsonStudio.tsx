@@ -5,14 +5,13 @@ import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut'
 import { useResizable } from '../../hooks/useResizable'
 import { ResizeHandle } from '../../components/ui/ResizeHandle'
 import { Kbd } from '../../components/ui/Kbd'
+import { PaneLabel } from '../../components/ui/PaneLabel'
 import { JsonEditor } from './JsonEditor'
 import { JsonOutput } from './JsonOutput'
 import { JsonTreeView } from './JsonTreeView'
 import { JsonToolbar } from './JsonToolbar'
 import { JsonErrorBanner } from './JsonErrorBanner'
 import { formatJson, fixJson, minifyJson, validateJson } from './json-studio.utils'
-
-const PANE_LABEL = 'px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase'
 
 interface MinifyStats {
   originalBytes: number
@@ -104,17 +103,7 @@ export function JsonStudio() {
           className="flex flex-col min-h-0 min-w-0"
           style={{ width: `${percent}%` }}
         >
-          <div
-            className={PANE_LABEL}
-            style={{
-              color: 'var(--text-muted)',
-              borderBottom: '1px solid var(--border)',
-              background: 'var(--bg-surface)',
-              borderLeft: '2px solid rgba(16,185,129,0.35)',
-            }}
-          >
-            Input
-          </div>
+          <PaneLabel rgb="16,185,129">Input</PaneLabel>
           <JsonEditor value={input} onChange={handleInputChange} />
         </div>
 
@@ -125,15 +114,7 @@ export function JsonStudio() {
           className="flex flex-col min-h-0 min-w-0"
           style={{ width: `${100 - percent}%` }}
         >
-          <div
-            className={`${PANE_LABEL} flex items-center justify-between`}
-            style={{
-              color: 'var(--text-muted)',
-              borderBottom: '1px solid var(--border)',
-              background: 'var(--bg-surface)',
-              borderLeft: '2px solid rgba(16,185,129,0.35)',
-            }}
-          >
+          <PaneLabel rgb="16,185,129" className="flex items-center justify-between">
             <span>Output</span>
             {savings !== null && minifyStats && (
               <span
@@ -148,7 +129,7 @@ export function JsonStudio() {
                 {savings}% smaller · {minifyStats.minifiedBytes.toLocaleString()}B
               </span>
             )}
-          </div>
+          </PaneLabel>
           {output ? (
             outputView === 'tree' ? (
               <JsonTreeView value={output} />

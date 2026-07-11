@@ -24,17 +24,34 @@ interface ComposeEditorProps {
   onLangChange: (lang: ComposeLang) => void
 }
 
+const HISTORY_LIMIT = 100
+
 export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: ComposeEditorProps) {
   const editableRef = useRef<HTMLDivElement>(null)
   const savedRange = useRef<Range | null>(null)
   const lastEmitted = useRef(body)
   const initialized = useRef(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Own undo/redo stack (innerHTML snapshots), rather than execCommand('undo'/'redo'):
+  // link/image/inline-code are inserted via the Range API (not execCommand), so they
+  // never land on the browser's native edit-history stack — a stack we control covers
+  // every mutation path uniformly, native and manual alike.
+  const historyRef = useRef<string[]>([body])
+  const historyIndexRef = useRef(0)
   const [activeFormats, setActiveFormats] = useState<ActiveFormats>(DEFAULT_FORMATS)
   const [currentBlock, setCurrentBlock] = useState('p')
   const [color, setColor] = useState('#f1f0ff')
   const [highlightColor, setHighlightColor] = useState(DEFAULT_HIGHLIGHT_COLOR)
   const [hasSelection, setHasSelection] = useState(false)
+
+  const pushHistory = useCallback((html: string) => {
+    const history = historyRef.current
+    if (history[historyIndexRef.current] === html) return
+    const truncated = history.slice(0, historyIndexRef.current + 1)
+    truncated.push(html)
+    historyRef.current = truncated.length > HISTORY_LIMIT ? truncated.slice(-HISTORY_LIMIT) : truncated
+    historyIndexRef.current = historyRef.current.length - 1
+  }, [])
 
   // Init once on mount, then only re-sync the DOM on external resets (e.g. Clear) —
   // never on our own onChangeBody round-trip, or the caret would jump on every keystroke.
@@ -49,8 +66,9 @@ export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: C
     if (body !== lastEmitted.current) {
       el.innerHTML = body
       lastEmitted.current = body
+      pushHistory(body)
     }
-  }, [body])
+  }, [body, pushHistory])
 
   const updateActiveFormats = useCallback(() => {
     const sel = window.getSelection()
@@ -110,9 +128,36 @@ export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: C
     debounceRef.current = setTimeout(() => {
       const clean = sanitizeHtml(el.innerHTML)
       lastEmitted.current = clean
+      pushHistory(clean)
       onChangeBody(clean)
     }, 200)
-  }, [onChangeBody])
+  }, [onChangeBody, pushHistory])
+
+  const applyHistorySnapshot = useCallback(
+    (html: string) => {
+      const el = editableRef.current
+      if (!el) return
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+      el.innerHTML = html
+      lastEmitted.current = html
+      onChangeBody(html)
+      el.focus()
+      updateActiveFormats()
+    },
+    [onChangeBody, updateActiveFormats],
+  )
+
+  const undo = useCallback(() => {
+    if (historyIndexRef.current <= 0) return
+    historyIndexRef.current -= 1
+    applyHistorySnapshot(historyRef.current[historyIndexRef.current])
+  }, [applyHistorySnapshot])
+
+  const redo = useCallback(() => {
+    if (historyIndexRef.current >= historyRef.current.length - 1) return
+    historyIndexRef.current += 1
+    applyHistorySnapshot(historyRef.current[historyIndexRef.current])
+  }, [applyHistorySnapshot])
 
   // Re-focuses the editable and restores its last known selection when focus has
   // drifted away (e.g. to a toolbar <select> or the link popup's <input>).
@@ -277,6 +322,8 @@ export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: C
         highlightColor={highlightColor}
         hasSelection={hasSelection}
         exec={exec}
+        onUndo={undo}
+        onRedo={redo}
         onToggleCode={toggleCode}
         onInsertLink={insertLink}
         onInsertImage={insertImage}
@@ -294,14 +341,6 @@ export function ComposeEditor({ body, onChangeBody, lang, dir, onLangChange }: C
         style={{ color: 'var(--text-primary)' }}
         onInput={emitChange}
         onPaste={handlePaste}
-        onKeyUp={() => {
-          trackSelection()
-          updateActiveFormats()
-        }}
-        onMouseUp={() => {
-          trackSelection()
-          updateActiveFormats()
-        }}
         onFocus={updateActiveFormats}
       />
     </div>

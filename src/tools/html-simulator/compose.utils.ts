@@ -27,6 +27,11 @@ export const FORMAT_BLOCK_OPTIONS: { value: string; label: string; tag: string }
   { value: 'blockquote', label: 'Quote', tag: 'blockquote' },
 ]
 
+// Pre-derived {value,label} shape for <Select> — computed once at module load
+// rather than remapped on every ComposeToolbar render.
+export const FORMAT_BLOCK_SELECT_OPTIONS = FORMAT_BLOCK_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
+export const LANGUAGE_SELECT_OPTIONS = LANGUAGE_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
+
 const UNSAFE_TAGS = ['script', 'iframe', 'object', 'embed']
 
 export function sanitizeHtml(html: string): string {

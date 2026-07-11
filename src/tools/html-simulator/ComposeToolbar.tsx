@@ -20,7 +20,7 @@ import {
 import { Select } from '../../components/ui/Select'
 import { ToolbarButton } from './ToolbarButton'
 import { UrlPopoverButton } from './UrlPopoverButton'
-import { FORMAT_BLOCK_OPTIONS, LANGUAGE_OPTIONS, type ComposeLang } from './compose.utils'
+import { FORMAT_BLOCK_SELECT_OPTIONS, LANGUAGE_SELECT_OPTIONS, type ComposeLang } from './compose.utils'
 
 export interface ActiveFormats {
   bold: boolean
@@ -43,6 +43,8 @@ interface ComposeToolbarProps {
   highlightColor: string
   hasSelection: boolean
   exec: (command: string, value?: string) => void
+  onUndo: () => void
+  onRedo: () => void
   onToggleCode: () => void
   onInsertLink: (url: string) => void
   onInsertImage: (url: string) => void
@@ -57,6 +59,8 @@ export function ComposeToolbar({
   highlightColor,
   hasSelection,
   exec,
+  onUndo,
+  onRedo,
   onToggleCode,
   onInsertLink,
   onInsertImage,
@@ -69,10 +73,10 @@ export function ComposeToolbar({
       role="toolbar"
       aria-label="Text formatting"
     >
-      <ToolbarButton onClick={() => exec('undo')} title="Undo">
+      <ToolbarButton onClick={onUndo} title="Undo">
         <Undo2 size={14} />
       </ToolbarButton>
-      <ToolbarButton onClick={() => exec('redo')} title="Redo">
+      <ToolbarButton onClick={onRedo} title="Redo">
         <Redo2 size={14} />
       </ToolbarButton>
 
@@ -111,7 +115,7 @@ export function ComposeToolbar({
       <div className="w-px h-5 mx-1" style={{ background: 'var(--border)' }} />
 
       <Select
-        options={FORMAT_BLOCK_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+        options={FORMAT_BLOCK_SELECT_OPTIONS}
         value={currentBlock}
         onChange={(e) => exec('formatBlock', `<${e.target.value}>`)}
       />
@@ -178,7 +182,7 @@ export function ComposeToolbar({
 
       <Select
         label="Language"
-        options={LANGUAGE_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+        options={LANGUAGE_SELECT_OPTIONS}
         value={lang}
         onChange={(e) => onLangChange(e.target.value as ComposeLang)}
       />
