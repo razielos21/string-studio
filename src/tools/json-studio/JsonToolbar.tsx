@@ -1,7 +1,8 @@
-import { Wand2, Minimize2, Trash2, Zap, List, Code2 } from 'lucide-react'
+import { Wand2, Minimize2, Trash2, Zap, List, Code2, Download } from 'lucide-react'
 import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { Select } from '../../components/ui/Select'
+import { downloadFile } from '../../lib/downloadFile'
 
 interface JsonToolbarProps {
   onFormat: () => void
@@ -57,6 +58,18 @@ export function JsonToolbar({
 
       <div className="flex-1" />
 
+      {output && (
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={() => downloadFile(output, 'data.json', 'application/json')}
+          title="Download JSON file"
+          style={{ color: 'var(--json-accent)' } as React.CSSProperties}
+        >
+          <Download size={14} />
+          Download JSON
+        </Button>
+      )}
       {output && (
         <Button
           variant={outputView === 'tree' ? 'accent' : 'default'}

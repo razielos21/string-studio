@@ -15,7 +15,7 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 - Fix malformed JSON (missing quotes, trailing commas, unquoted keys) via `jsonrepair`
 - Minify to a single line
 - Live parse-error banner with exact line and column numbers
-- Copy output to clipboard
+- Copy output to clipboard, or download it as a `.json` file
 - Tree view with hover-to-copy dot-path on any node (e.g. `user.address.city`)
 
 ### Comparator
@@ -34,18 +34,29 @@ A single-page developer text utility app — replace the half-dozen browser tabs
 - **Encoding**: Base64 encode/decode, URL encode/decode, HTML escape/unescape
 
 ### HTML Simulator
-- Paste HTML and see it rendered instantly in a sandboxed iframe
-- Supports inline CSS and JavaScript
+Two modes, sharing one tool:
+
+**Preview** (`/html`) — paste HTML and see it rendered instantly
+- Renders in a sandboxed iframe, supports inline CSS and JavaScript
 - Live preview toggle (debounced 300ms) or manual Preview button
 - Resizable editor/preview split pane
-- Export to PDF via browser print dialog
+- Download as `.html`
+
+**Compose** (`/html-compose`) — a WYSIWYG rich-text editor that *generates* HTML, the reverse of Preview
+- Formatting toolbar: bold/italic/underline/strikethrough, text + highlight color, headings/paragraph/quote, bullet/numbered lists, alignment, undo/redo, clear formatting
+- Insert links (opens in a new tab, not the preview) and images by URL, with a one-click "remove link"
+- Inline code formatting and horizontal rule insertion
+- Paste from Word/webpages lands as plain text — no imported fonts/colors/markup cruft
+- Language selector (English/Hebrew, extensible) sets text direction (LTR/RTL) on both the editor and the generated document
+- Three resizable panes: rich-text editor | generated HTML (live) | rendered preview
+- Download the generated document as `.html`
 
 ### Markdown Preview
 - Live Markdown preview with GitHub Flavored Markdown (GFM) — tables, code blocks, blockquotes, strikethrough
 - Monaco editor with Markdown language support
 - Live preview toggle (debounced 300ms) or manual Preview button
 - Resizable editor/preview split pane
-- Export to PDF via browser print dialog
+- Export to PDF via browser print dialog, or download the raw source as `.md`
 
 ### JWT Decoder
 - Paste any JWT to decode header, payload, and signature into three panels

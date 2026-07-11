@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAsyncAction } from '../../hooks/useAsyncAction'
-import { FileDown, FileText, Trash2, Zap } from 'lucide-react'
+import { Download, FileDown, FileText, Trash2, Zap } from 'lucide-react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useResizable } from '../../hooks/useResizable'
 import { ResizeHandle } from '../../components/ui/ResizeHandle'
@@ -8,9 +8,11 @@ import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { CodeEditor } from '../../components/ui/CodeEditor'
 import { SandboxPreview } from '../../components/ui/SandboxPreview'
+import { PaneLabel } from '../../components/ui/PaneLabel'
 import { buildMarkdownDoc } from './markdown-preview.utils'
 import { downloadMarkdownPdf } from './markdownToPdf'
-import { PANE_LABEL } from '../../lib/styles'
+import { downloadFile } from '../../lib/downloadFile'
+import { activeAccentStyle } from '../../lib/styles'
 
 const DEFAULT_MD = `# Welcome to Markdown Preview
 
@@ -71,6 +73,8 @@ export function MarkdownPreview() {
     setDoc(buildMarkdownDoc(DEFAULT_MD))
   }
 
+  const handleDownload = () => downloadFile(input, 'document.md', 'text/markdown')
+
   return (
     <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
       {/* Toolbar */}
@@ -80,11 +84,7 @@ export function MarkdownPreview() {
           size="md"
           onClick={handleToggleLive}
           title={livePreview ? 'Live preview on — click to disable' : 'Live preview off — click to enable'}
-          style={
-            livePreview
-              ? ({ color: '#f43f5e', background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.25)' } as React.CSSProperties)
-              : undefined
-          }
+          style={livePreview ? activeAccentStyle('#f43f5e', '244,63,94') : undefined}
         >
           <Zap size={14} />
           Live
@@ -114,6 +114,17 @@ export function MarkdownPreview() {
           {isPdfLoading ? 'Generating…' : 'Export PDF'}
         </Button>
 
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={handleDownload}
+          title="Download Markdown file"
+          style={{ color: '#f43f5e' } as React.CSSProperties}
+        >
+          <Download size={14} />
+          Download MD
+        </Button>
+
         <CopyButton text={input} size="md" />
 
         <Button variant="ghost" size="md" onClick={handleClear} title="Reset to default">
@@ -125,24 +136,14 @@ export function MarkdownPreview() {
       {/* Panes */}
       <div ref={containerRef} className="flex flex-1 min-h-0">
         <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${percent}%` }}>
-          <div
-            className={PANE_LABEL}
-            style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(244,63,94,0.35)' }}
-          >
-            Markdown
-          </div>
+          <PaneLabel rgb="244,63,94">Markdown</PaneLabel>
           <CodeEditor value={input} onChange={setInput} language="markdown" />
         </div>
 
         <ResizeHandle onMouseDown={startDrag} />
 
         <div className="flex flex-col min-h-0 min-w-0" style={{ width: `${100 - percent}%` }}>
-          <div
-            className={PANE_LABEL}
-            style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', borderLeft: '2px solid rgba(244,63,94,0.35)' }}
-          >
-            Preview
-          </div>
+          <PaneLabel rgb="244,63,94">Preview</PaneLabel>
           <SandboxPreview
             doc={doc}
             emptyIcon={FileText}

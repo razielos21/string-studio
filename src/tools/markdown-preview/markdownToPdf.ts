@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { marked, type Token, type Tokens } from 'marked'
 import type { TDocumentDefinitions } from 'pdfmake/interfaces'
+import { htmlUnescape } from '../text-playground/text-playground.utils'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
+  return htmlUnescape(text).replace(/&nbsp;/g, ' ')
 }
 
 // Resolves a text/paragraph token to an inline pdfmake content array.
