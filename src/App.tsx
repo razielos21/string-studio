@@ -19,7 +19,8 @@ const TOOL_META: Record<string, { label: string; Icon: React.ComponentType<{ siz
   '/json':       { label: 'JSON Studio',    Icon: Braces,     color: 'var(--json-accent)', hex: '#10b981' },
   '/comparator': { label: 'Comparator',     Icon: GitCompare, color: 'var(--diff-accent)', hex: '#6366f1' },
   '/text':       { label: 'Text Playground',Icon: Type,       color: 'var(--text-accent)', hex: '#f59e0b' },
-  '/html':       { label: 'HTML Simulator', Icon: Monitor,    color: 'var(--html-accent)', hex: '#06b6d4' },
+  '/html':         { label: 'HTML Simulator', Icon: Monitor,  color: 'var(--html-accent)', hex: '#06b6d4' },
+  '/html-compose': { label: 'HTML Simulator', Icon: Monitor,  color: 'var(--html-accent)', hex: '#06b6d4' },
   '/jwt':        { label: 'JWT Decoder',    Icon: KeySquare,  color: 'var(--jwt-accent)',  hex: '#a855f7' },
   '/markdown':   { label: 'Markdown',       Icon: FileText,   color: 'var(--md-accent)',   hex: '#f43f5e' },
 }
@@ -67,7 +68,8 @@ const PAGE_TITLES: Record<string, string> = {
   '/json':       'JSON Studio - String Studio',
   '/comparator': 'Comparator - String Studio',
   '/text':       'Text Playground - String Studio',
-  '/html':       'HTML Simulator - String Studio',
+  '/html':         'HTML Simulator - String Studio',
+  '/html-compose': 'HTML Simulator - String Studio',
   '/jwt':        'JWT Decoder - String Studio',
   '/markdown':   'Markdown - String Studio',
 }
@@ -167,6 +169,14 @@ function Layout() {
             />
             <Route
               path="/html"
+              element={
+                <ErrorBoundary toolName="HTML Simulator">
+                  <HtmlSimulator />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/html-compose"
               element={
                 <ErrorBoundary toolName="HTML Simulator">
                   <HtmlSimulator />

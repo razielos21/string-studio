@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAsyncAction } from '../../hooks/useAsyncAction'
-import { FileDown, FileText, Trash2, Zap } from 'lucide-react'
+import { Download, FileDown, FileText, Trash2, Zap } from 'lucide-react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useResizable } from '../../hooks/useResizable'
 import { ResizeHandle } from '../../components/ui/ResizeHandle'
@@ -10,6 +10,7 @@ import { CodeEditor } from '../../components/ui/CodeEditor'
 import { SandboxPreview } from '../../components/ui/SandboxPreview'
 import { buildMarkdownDoc } from './markdown-preview.utils'
 import { downloadMarkdownPdf } from './markdownToPdf'
+import { downloadFile } from '../../lib/downloadFile'
 import { PANE_LABEL } from '../../lib/styles'
 
 const DEFAULT_MD = `# Welcome to Markdown Preview
@@ -71,6 +72,8 @@ export function MarkdownPreview() {
     setDoc(buildMarkdownDoc(DEFAULT_MD))
   }
 
+  const handleDownload = () => downloadFile(input, 'document.md', 'text/markdown')
+
   return (
     <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>
       {/* Toolbar */}
@@ -112,6 +115,17 @@ export function MarkdownPreview() {
         >
           <FileDown size={14} />
           {isPdfLoading ? 'Generating…' : 'Export PDF'}
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={handleDownload}
+          title="Download Markdown file"
+          style={{ color: '#f43f5e' } as React.CSSProperties}
+        >
+          <Download size={14} />
+          Download MD
         </Button>
 
         <CopyButton text={input} size="md" />
