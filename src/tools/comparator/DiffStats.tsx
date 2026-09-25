@@ -1,6 +1,6 @@
-import { diffLines } from 'diff'
 import { useMemo } from 'react'
 import { Plus, Minus, Equal } from 'lucide-react'
+import { computeDiffStats } from './comparator.utils'
 
 interface DiffStatsProps {
   original: string
@@ -9,21 +9,9 @@ interface DiffStatsProps {
 }
 
 export function DiffStats({ original, modified, ignoreCase = false }: DiffStatsProps) {
-  const stats = useMemo(() => {
-    if (!original && !modified) return null
-    const changes = diffLines(original, modified)
-    let added = 0, removed = 0, unchanged = 0
-    for (const c of changes) {
-      const n = c.count ?? 0
-      if (c.added) added += n
-      else if (c.removed) removed += n
-      else unchanged += n
-    }
-    return { added, removed, unchanged }
-  }, [original, modified])
+  const stats = useMemo(() => computeDiffStats(original, modified), [original, modified])
 
   if (!stats) return null
-  const isIdentical = stats.added === 0 && stats.removed === 0
 
   return (
     <div
@@ -31,7 +19,7 @@ export function DiffStats({ original, modified, ignoreCase = false }: DiffStatsP
       style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)' }}
       aria-label="Diff statistics"
     >
-      {isIdentical ? (
+      {stats.identical ? (
         <span className="flex items-center gap-1.5" style={{ color: 'var(--text-muted)' }}>
           <Equal size={11} aria-hidden />
           <span>Files are identical</span>

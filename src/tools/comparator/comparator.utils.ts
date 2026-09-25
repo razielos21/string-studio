@@ -1,3 +1,40 @@
+import { diffLines } from 'diff'
+
+export interface DiffNormalizeOptions {
+  ignoreCase?: boolean
+  ignoreWhitespace?: boolean
+}
+
+/** Applies the Comparator's ignore-case / ignore-whitespace normalization to both sides. */
+export function normalizeForDiff(left: string, right: string, opts: DiffNormalizeOptions = {}): [string, string] {
+  let l = opts.ignoreCase ? left.toLowerCase() : left
+  let r = opts.ignoreCase ? right.toLowerCase() : right
+  if (opts.ignoreWhitespace) {
+    l = l.split('\n').map(line => line.trim()).join('\n')
+    r = r.split('\n').map(line => line.trim()).join('\n')
+  }
+  return [l, r]
+}
+
+export interface DiffStatsResult {
+  added: number
+  removed: number
+  unchanged: number
+  identical: boolean
+}
+
+export function computeDiffStats(original: string, modified: string): DiffStatsResult | null {
+  if (!original && !modified) return null
+  let added = 0, removed = 0, unchanged = 0
+  for (const c of diffLines(original, modified)) {
+    const n = c.count ?? 0
+    if (c.added) added += n
+    else if (c.removed) removed += n
+    else unchanged += n
+  }
+  return { added, removed, unchanged, identical: added === 0 && removed === 0 }
+}
+
 export type Language =
   | 'plaintext'
   | 'json'
