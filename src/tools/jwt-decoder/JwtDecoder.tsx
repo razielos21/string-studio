@@ -2,44 +2,9 @@ import { useMemo } from 'react'
 import { ShieldCheck, ShieldAlert, ShieldOff } from 'lucide-react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { CopyButton } from '../../components/ui/CopyButton'
+import { decodeJwt, formatRelative, getExpStatus, nowSecs } from './jwt.utils'
 
 const JWT_ACCENT = '#a855f7'
-
-// ── Decode utils ───────────────────────────────────────────────────────────
-
-function base64urlDecode(str: string): string {
-  const b64 = str.replace(/-/g, '+').replace(/_/g, '/')
-  const padded = b64.padEnd(b64.length + (4 - (b64.length % 4)) % 4, '=')
-  const bytes = Uint8Array.from(atob(padded), c => c.charCodeAt(0))
-  return new TextDecoder().decode(bytes)
-}
-
-type DecodedJwt =
-  | { ok: true; header: Record<string, unknown>; payload: Record<string, unknown>; signature: string }
-  | { ok: false; error: string }
-
-function decodeJwt(token: string): DecodedJwt | null {
-  if (!token) return null
-  const parts = token.split('.')
-  if (parts.length !== 3) {
-    return { ok: false, error: `Expected 3 dot-separated parts, got ${parts.length}` }
-  }
-  try {
-    const header = JSON.parse(base64urlDecode(parts[0])) as Record<string, unknown>
-    const payload = JSON.parse(base64urlDecode(parts[1])) as Record<string, unknown>
-    return { ok: true, header, payload, signature: parts[2] }
-  } catch {
-    return { ok: false, error: 'Failed to decode — invalid base64url encoding or malformed JSON' }
-  }
-}
-
-function formatRelative(totalSecs: number): string {
-  const abs = Math.abs(Math.round(totalSecs))
-  if (abs < 60) return `${abs}s`
-  if (abs < 3600) return `${Math.floor(abs / 60)}m`
-  if (abs < 86400) return `${Math.floor(abs / 3600)}h`
-  return `${Math.floor(abs / 86400)}d`
-}
 
 // ── JSON syntax highlighter ────────────────────────────────────────────────
 
@@ -84,8 +49,7 @@ function PanelHeader({ title, copyText }: { title: string; copyText: string }) {
 // ── ExpRow ─────────────────────────────────────────────────────────────────
 
 function ExpRow({ exp }: { exp: number }) {
-  const now = Math.floor(Date.now() / 1000)
-  const diff = exp - now
+  const diff = exp - nowSecs()
   const date = new Date(exp * 1000).toLocaleString()
 
   let color: string
@@ -93,10 +57,11 @@ function ExpRow({ exp }: { exp: number }) {
   let Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>
   let label: string
 
-  if (diff < 0) {
+  const status = getExpStatus(diff)
+  if (status === 'expired') {
     color = 'var(--error)'; bg = 'rgba(239,68,68,0.08)'; Icon = ShieldOff
     label = `Expired ${formatRelative(diff)} ago`
-  } else if (diff < 300) {
+  } else if (status === 'expiring') {
     color = 'var(--warning)'; bg = 'rgba(245,158,11,0.08)'; Icon = ShieldAlert
     label = `Expires in ${formatRelative(diff)}`
   } else {

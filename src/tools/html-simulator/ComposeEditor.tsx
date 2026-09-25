@@ -1,6 +1,7 @@
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { ComposeToolbar, type ActiveFormats } from './ComposeToolbar'
-import { FORMAT_BLOCK_OPTIONS, DEFAULT_HIGHLIGHT_COLOR, rgbToHex, sanitizeHtml, familyForFont, type ComposeLang, type ComposeFont } from './compose.utils'
+import { FORMAT_BLOCK_OPTIONS, DEFAULT_HIGHLIGHT_COLOR, rgbToHex, familyForFont, type ComposeLang, type ComposeFont } from './compose.utils'
+import { sanitizeHtml } from './sanitizeHtml'
 
 const DEFAULT_FORMATS: ActiveFormats = {
   bold: false,

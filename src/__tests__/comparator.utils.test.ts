@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { detectLanguage } from '../tools/comparator/comparator.utils'
+import { detectLanguage, normalizeForDiff, computeDiffStats } from '../tools/comparator/comparator.utils'
 
 describe('detectLanguage', () => {
   it('detects JSON', () => {
@@ -59,5 +59,33 @@ describe('detectLanguage', () => {
     // Plain text with colons should not be YAML unless multiple key: value patterns
     const result = detectLanguage('Time: 5pm\nPlace: here')
     expect(result).toBe('yaml')
+  })
+})
+
+describe('normalizeForDiff', () => {
+  it('returns inputs unchanged by default', () => {
+    expect(normalizeForDiff('A \n b', 'C')).toEqual(['A \n b', 'C'])
+  })
+
+  it('lowercases when ignoreCase is set', () => {
+    expect(normalizeForDiff('Foo', 'BAR', { ignoreCase: true })).toEqual(['foo', 'bar'])
+  })
+
+  it('trims each line when ignoreWhitespace is set', () => {
+    expect(normalizeForDiff('  a  \n\tb', 'c ', { ignoreWhitespace: true })).toEqual(['a\nb', 'c'])
+  })
+})
+
+describe('computeDiffStats', () => {
+  it('returns null when both sides are empty', () => {
+    expect(computeDiffStats('', '')).toBeNull()
+  })
+
+  it('counts added, removed and unchanged lines', () => {
+    expect(computeDiffStats('a\nb\nc\n', 'a\nx\nc\nd\n')).toEqual({ added: 2, removed: 1, unchanged: 2, identical: false })
+  })
+
+  it('reports identical inputs as all unchanged', () => {
+    expect(computeDiffStats('a\nb\n', 'a\nb\n')).toEqual({ added: 0, removed: 0, unchanged: 2, identical: true })
   })
 })

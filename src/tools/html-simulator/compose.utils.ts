@@ -5,7 +5,7 @@ export const LANGUAGE_OPTIONS: { value: ComposeLang; label: string; dir: 'ltr' |
   { value: 'he', label: 'Hebrew', dir: 'rtl' },
 ]
 
-export function dirForLang(lang: string): 'ltr' | 'rtl' {
+export function dirForLang(lang: ComposeLang): 'ltr' | 'rtl' {
   return LANGUAGE_OPTIONS.find((o) => o.value === lang)?.dir ?? 'ltr'
 }
 
@@ -67,28 +67,6 @@ export const FORMAT_BLOCK_OPTIONS: { value: string; label: string; tag: string }
 export const FORMAT_BLOCK_SELECT_OPTIONS = FORMAT_BLOCK_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 export const LANGUAGE_SELECT_OPTIONS = LANGUAGE_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 export const FONT_SELECT_OPTIONS = FONT_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
-
-const UNSAFE_TAGS = ['script', 'iframe', 'object', 'embed']
-
-export function sanitizeHtml(html: string): string {
-  const doc = new DOMParser().parseFromString(html, 'text/html')
-
-  UNSAFE_TAGS.forEach((tag) => {
-    doc.querySelectorAll(tag).forEach((el) => el.remove())
-  })
-
-  doc.querySelectorAll('*').forEach((el) => {
-    Array.from(el.attributes).forEach((attr) => {
-      const name = attr.name.toLowerCase()
-      const value = attr.value.trim().toLowerCase()
-      if (name.startsWith('on') || ((name === 'href' || name === 'src') && value.startsWith('javascript:'))) {
-        el.removeAttribute(attr.name)
-      }
-    })
-  })
-
-  return doc.body.innerHTML
-}
 
 export function buildHtmlDocument(bodyHtml: string, lang: string, dir: 'ltr' | 'rtl', font: ComposeFont = 'sans'): string {
   return `<!DOCTYPE html>

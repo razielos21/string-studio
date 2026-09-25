@@ -6,7 +6,7 @@ import { CharDiffView } from './CharDiffView'
 import { DiffStats } from './DiffStats'
 import { Select } from '../../components/ui/Select'
 import { Button } from '../../components/ui/Button'
-import { detectLanguage, LANGUAGE_OPTIONS, type Language } from './comparator.utils'
+import { detectLanguage, normalizeForDiff, LANGUAGE_OPTIONS, type Language } from './comparator.utils'
 import { Columns2, AlignLeft, Trash2, ScanText } from 'lucide-react'
 
 export function Comparator() {
@@ -35,15 +35,10 @@ export function Comparator() {
   useKeyboardShortcut('Enter', handleToggleMode, { alt: true })
   useKeyboardShortcut('i', () => setInline((v) => !v), { alt: true })
 
-  const [diffLeft, diffRight] = useMemo(() => {
-    let l = ignoreCase ? left.toLowerCase() : left
-    let r = ignoreCase ? right.toLowerCase() : right
-    if (ignoreWhitespace) {
-      l = l.split('\n').map(line => line.trim()).join('\n')
-      r = r.split('\n').map(line => line.trim()).join('\n')
-    }
-    return [l, r]
-  }, [left, right, ignoreCase, ignoreWhitespace])
+  const [diffLeft, diffRight] = useMemo(
+    () => normalizeForDiff(left, right, { ignoreCase, ignoreWhitespace }),
+    [left, right, ignoreCase, ignoreWhitespace],
+  )
 
   return (
     <div className="flex flex-col h-full overflow-hidden animate-fade-up" style={{ background: 'var(--bg-base)' }}>

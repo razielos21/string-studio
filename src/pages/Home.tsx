@@ -11,6 +11,7 @@ import {
   Lock,
   HardDrive,
 } from "lucide-react";
+import { UseWithAi } from "./UseWithAi";
 
 const tools = [
   {
@@ -230,32 +231,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* ── Section divider ───────────────────────────────── */}
-      <div
-        className="relative z-10 flex items-center gap-4 animate-fade-up delay-300"
-        style={{
-          padding: "0 clamp(1.5rem, 4vw, 4rem)",
-          maxWidth: "1100px",
-          alignSelf: "center",
-          width: "100%",
-          marginBottom: "1.25rem",
-        }}
-      >
-        <div
-          className="flex-1 h-px"
-          style={{ background: "var(--border-muted)" }}
-        />
-        <span
-          className="text-[10px] font-semibold tracking-widest uppercase"
-          style={{ color: "var(--text-muted)" }}
-        >
-          Tools
-        </span>
-        <div
-          className="flex-1 h-px"
-          style={{ background: "var(--border-muted)" }}
-        />
-      </div>
+      <SectionDivider label="Tools" delayClass="delay-300" />
 
       {/* ── Cards ────────────────────────────────────────── */}
       <section
@@ -304,6 +280,20 @@ export function Home() {
         </div>
       </section>
 
+      {/* ── Use with AI (MCP) ────────────────────────────── */}
+      <SectionDivider label="Use with AI" delayClass="delay-400" />
+      <section
+        className="relative z-10 w-full mx-auto animate-fade-up delay-400"
+        style={{
+          flex: "0 0 auto",
+          padding: "0 clamp(1.5rem, 4vw, 4rem) clamp(1.25rem, 3vh, 2.5rem)",
+          maxWidth: "1100px",
+          alignSelf: "center",
+        }}
+      >
+        <UseWithAi />
+      </section>
+
       {/* ── Footer ───────────────────────────────────────── */}
       <footer
         className="relative z-10 mt-auto animate-fade-up delay-400"
@@ -329,7 +319,7 @@ export function Home() {
             </span>
             <span style={{ color: "var(--border)" }}>·</span>
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-              Six tools. One tab. Zero backend.
+              Six tools. One tab. Plus MCP for your AI.
             </span>
           </div>
           <div
@@ -341,6 +331,38 @@ export function Home() {
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+/* ── Section divider ─────────────────────────────────────────────────────── */
+function SectionDivider({
+  label,
+  delayClass,
+}: {
+  label: string;
+  /** Match the section it heads so the two fade in together. */
+  delayClass: "delay-300" | "delay-400";
+}) {
+  return (
+    <div
+      className={`relative z-10 flex items-center gap-4 animate-fade-up ${delayClass}`}
+      style={{
+        padding: "0 clamp(1.5rem, 4vw, 4rem)",
+        maxWidth: "1100px",
+        alignSelf: "center",
+        width: "100%",
+        marginBottom: "1.25rem",
+      }}
+    >
+      <div className="flex-1 h-px" style={{ background: "var(--border-muted)" }} />
+      <span
+        className="text-[10px] font-semibold tracking-widest uppercase"
+        style={{ color: "var(--text-muted)" }}
+      >
+        {label}
+      </span>
+      <div className="flex-1 h-px" style={{ background: "var(--border-muted)" }} />
     </div>
   );
 }

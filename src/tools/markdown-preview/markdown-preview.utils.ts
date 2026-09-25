@@ -2,8 +2,12 @@ import { marked } from 'marked'
 
 marked.setOptions({ gfm: true, breaks: true })
 
+export function markdownToHtml(md: string): string {
+  return marked.parse(md) as string
+}
+
 export function buildMarkdownDoc(md: string): string {
-  const html = marked.parse(md) as string
+  const html = markdownToHtml(md)
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
